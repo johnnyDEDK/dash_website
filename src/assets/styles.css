@@ -1,5 +1,27 @@
-
 .article-card:hover {
     border: 2px solid var(--bs-primary) !important;
     border-radius: 0.25rem;
+}
+
+/* styles.css */
+.markdown-responsive {
+    font-size: 18px !important;
+    ;
+    /* Default font size */
+}
+
+@media (max-width: 768px) {
+    .markdown-responsive {
+        font-size: 16px !important;
+        ;
+        /* Smaller font size for smaller screens */
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .markdown-responsive {
+        font-size: 20px !important;
+        ;
+        /* Medium font size for medium screens */
+    }
 }

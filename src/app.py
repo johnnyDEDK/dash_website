@@ -1,28 +1,16 @@
-# package imports
 import dash
-from dash import html
 import dash_bootstrap_components as dbc
+
+FONT_AWESOME = "https://use.fontawesome.com/releases/v5.10.2/css/all.css"
+external_stylesheets = ["assets/bootstrap.css", "assets/styles.css"]  # , dbc.themes.YETI, FONT_AWESOME
 
 app = dash.Dash(
     __name__,
-    use_pages=True,
-    external_stylesheets=[
-        dbc.themes.BOOTSTRAP
-    ],
-    title='Sample blog site'
+    external_stylesheets=external_stylesheets,
+    # meta_tags=[
+    #     {"name": "viewport", "content": "width=device-width, initial-scale=1"},
+    # ],
 )
-
-def serve_layout():
-    return html.Div(
-        [
-            'Navbar',
-            dbc.Container(
-                dash.page_container
-            )
-        ]
-    )
-
-app.layout = serve_layout
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
+app.config.suppress_callback_exceptions = True
+app.title = "Veränderungen annehmen, angehen und gestalten."
+server = app.server
