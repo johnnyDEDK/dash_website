@@ -10,6 +10,18 @@
     /* Default font size */
 }
 
+.dmc-image {
+    max-width: 100%;
+    height: auto;
+}
+
+@media screen and (min-width: 768px) {
+    .dmc-image {
+        max-width: 500px;
+        /* Adjust as needed */
+        height: auto;
+    }
+}
 @media (max-width: 768px) {
     .markdown-responsive {
         font-size: 16px !important;
@@ -24,4 +36,17 @@
         ;
         /* Medium font size for medium screens */
     }
+}
+@media (min-width: 1025px) and (max-width: 6024px) {
+    .markdown-responsive {
+        font-size: 22px !important;
+        ;
+        /* Medium font size for medium screens */
+    }
+}
+
+.divider {
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+    height: 1px;
 }

@@ -42,6 +42,7 @@ class DashBasePage:
 
         self.app = app
         self._callbacks = []
+        self.path = ""
 
     def layout(self):
         return html.Div(

@@ -10,6 +10,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
+accordion_color = "#D6DCE5"  # "#F8F9FA"
 
 
 class FrontEndLayout(DashBasePage):
@@ -24,7 +25,7 @@ class FrontEndLayout(DashBasePage):
     def _layout_body(self):
         return dmc.MantineProvider(
             theme={
-                "fontFamily": "'Inter', sans-serif",
+                "fontFamily": "Georgia",
                 "primaryColor": "dark",
                 "components": {
                     "Button": {"styles": {"root": {"fontWeight": 400}}},
@@ -37,13 +38,30 @@ class FrontEndLayout(DashBasePage):
                     [
                         dbc.Row(
                             [
-                                # dbc.Col(
-                                self._layout_body_card(),
-                                # width={"size": 10, "offset": 0},
-                                # class_name="mt-auto",
-                                # ),
+                                dbc.Col(
+                                    self._layout_body_card(),
+                                    width={"size": 10},
+                                    md={"size": 10},
+                                    sm={"size": 10},
+                                    lg={"size": 10},
+                                    xl={"size": 10},  # , "offset": 1},
+                                    xxl={"size": 7},  # , "offset": 1},
+                                    style={
+                                        "align-self": "center",
+                                        "background-color": "#D6DCE5",
+                                        "justify-content": "center",
+                                    },
+                                    align="center",
+                                    class_name="g-0",
+                                ),
                             ],
-                            class_name="mb-5",
+                            class_name="g-0",
+                            align="center",
+                            style={
+                                "align-self": "center",
+                                "background-color": "white",
+                                "justify-content": "center",
+                            },
                         ),
                     ],
                     fluid=True,
@@ -52,34 +70,100 @@ class FrontEndLayout(DashBasePage):
         )
 
     def _layout_body_card(self):
-        return dmc.Card(
-            children=[
-                dmc.CardSection(
-                    children=[
-                        dmc.SimpleGrid(
-                            cols=3,
-                            children=self._layout_cardheader_second_row(),
-                            mt="sm",
-                            breakpoints=[
-                                {"minWidth": 1001, "maxWidth": 2000, "cols": 3},
-                                {"minWidth": 600, "maxWidth": 1000, "cols": 1},
-                            ],
-                        ),
-                    ],
-                    withBorder=True,
-                    inheritPadding=True,
-                    mr=0,
-                    style={"width": "100%", "backgroundcolor": "lightgray"},
-                ),
-                dmc.CardSection(self._layout_cardbody(), inheritPadding=True, withBorder=True),
-                dmc.CardSection(self._layout_cardbody_third_row(), withBorder=True, inheritPadding=True),
-            ],
-            withBorder=True,
-            shadow="sm",
-            radius="md",
-            mr=0,
-            style={"width": "100%", "backgroundcolor": "lightgray"},
-        )
+        return [
+            dmc.Card(
+                children=[
+                    dmc.CardSection(
+                        children=[
+                            dmc.SimpleGrid(
+                                cols=1,
+                                children=self._layout_cardheader_second_row(),
+                                # mt="sm",
+                                breakpoints=[
+                                    {"minWidth": 1001, "maxWidth": 10000, "cols": 2},
+                                    {"minWidth": 600, "maxWidth": 1000, "cols": 1},
+                                ],
+                                style={
+                                    "align-self": "center",
+                                    "justify-content": "center",
+                                    "background-color": "#D6DCE5",
+                                },
+                            ),
+                        ],
+                        withBorder=True,
+                        inheritPadding=False,
+                        # mr=0,
+                        # ml=0,
+                        style={
+                            # "width": "100%",
+                            # "height": "100%",
+                            "align-self": "center",
+                            "justify-content": "center",
+                            "background-color": "#D6DCE5",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._divider(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "center",
+                            "background-color": "white",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._layout_cardbody(),
+                        withBorder=True,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr=0,
+                        style={
+                            # "width": "100%",
+                            # "height": "100%",
+                            "align-self": "center",
+                            "justify-content": "center",
+                            "background-color": "#D6DCE5",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._divider(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "center",
+                            "background-color": "white",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._layout_cardbody_third_row(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr=0,
+                        style={
+                            "align-self": "center",
+                            "background-color": "#D6DCE5",
+                        },
+                    ),
+                ],
+                withBorder=False,
+                # shadow="sm",
+                # radius="md",
+                # mr=0,
+                style={
+                    "width": "100%",
+                    "height": "100%",
+                    "align-self": "center",
+                    "background-color": "#D6DCE5",
+                    "justify-content": "center",
+                },
+                # className="d-flex justify-content-center",
+            )
+        ]
 
     def _layout_cardheader(self):
         return self._layout_cardheader_second_row()
@@ -87,28 +171,42 @@ class FrontEndLayout(DashBasePage):
     def _layout_cardheader_second_row(self):
         return [
             dmc.Image(
-                radius="md",
-                src=self.path + "assets/Website_Header.svg",
-                style={"width": "100%", "height": "100%"},
-                # height="180px",
-            ),
-            dmc.Image(
-                radius="md",
                 src=self.path + "assets/Unbenannt.png",
-                fit="cover",
-                style={"width": "100%", "height": "100%"},
+                style={
+                    "width": "100%",
+                    "maxWidth": "800px",
+                    "height": "100%",
+                    "align-self": "center",
+                    "background-color": "#D6DCE5",
+                    "justify-content": "center",
+                    "@media screen and (min-width: 768px)": {"maxWidth": "500px", "height": "auto"},
+                },
             ),
             dmc.Card(
                 [
-                    dmc.CardSection(self._header_list(), inheritPadding=False, mr=0),
+                    dmc.CardSection(
+                        self._header_list(),
+                        inheritPadding=True,
+                        className="d-flex justify-content-center align-content-center",
+                        style={"align": "center", "background-color": "#D6DCE5", "margin-top": "20px"},
+                    ),
                     dmc.CardSection(
                         self._free_contact(),
-                        py="xl",
-                        style={"align": "center"},
-                        inheritPadding=False,
+                        # py="xl",
+                        style={
+                            "align": "center",
+                            "background-color": "#D6DCE5",
+                        },
+                        inheritPadding=True,
                     ),
                 ],
-                style={"align": "center"},
+                style={
+                    "width": "100%",
+                    "height": "100%",
+                    "align-self": "center",
+                    "background-color": "#D6DCE5",
+                    "justify-content": "center",
+                },
             ),
         ]
 
@@ -125,7 +223,7 @@ class FrontEndLayout(DashBasePage):
         return dbc.Row([self._free_contact()])
 
     def _layout_cardbody_third_row(self):
-        return self._carousel()  # dbc.Row([self._accordion()])
+        return dbc.Row(self.accordion_card())
 
     def _layout_cardfooter(self):
         return self._carousel()
@@ -141,36 +239,75 @@ class FrontEndLayout(DashBasePage):
                     {"minWidth": 600, "maxWidth": 754, "cols": 1},
                 ],
                 verticalSpacing=0,
+                style={
+                    "display": "flex",
+                    "justify-content": "center",
+                },
             ),
             size="auto",
+            style={
+                "display": "flex",
+                "justify-content": "center",
+            },
         )
 
     def _header_list(self):
-        return dcc.Markdown(
-            "Sie \n* stehen Privat oder im Beruf vor einer Veränderung.\n* sind Führungskraft oder Unternehmer und mit ihrem Team im Veränderungsprozess.\n* möchten eine Veränderung in Ihrem Leben erwirken.",
-            style={
-                "font-family": "Georgia",
-                "align": "left",
-                "overflow": "hidden",
-                "textOverflow": "ellipsis",
-                "margin-bottom": "-20px",
-                "margin-top": "-20px",
-                "margin-right": "-20px",
-                "margin": "0px",
-                "line-height": "1.1",
-            },
-            className="markdown-responsive",
+        return dbc.Row(
+            dbc.Col(
+                dcc.Markdown(
+                    [
+                        """Sie """,
+                        """\n* stehen Privat oder im Beruf vor einer Veränderung.""",
+                        """\n* sind Führungskraft oder Unternehmer und mit ihrem Team im Veränderungsprozess.""",
+                        """\n* möchten eine Veränderung in Ihrem Leben erwirken.""",
+                    ],
+                    style={
+                        "font-family": "Georgia",
+                        "align": "left",
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "margin-bottom": "-20px",
+                        "margin-top": "20px",
+                        "margin-right": "-20px",
+                        "margin": "0px",
+                        "line-height": "1.1",
+                        # "display": "flex",
+                        "justify-content": "center",
+                    },
+                    className="markdown-responsive align-content-center justify-content-center",
+                ),
+                align="center",
+                className="align-content-center justify-content-center",
+            ),
+            justify="center",
+            className="align-content-center justify-content-center",
         )
 
     def _free_contact(self):
         return html.Div(
-            style={"display": "flex", "justifyContent": "center", "alignItems": "center", "margin-bottom": "20px"},
+            style={
+                "display": "flex",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "margin-bottom": "20px",
+                "background-color": "#D6DCE5",
+            },
             children=[
                 dmc.Anchor(
                     dmc.Button(
-                        "Kostenfreies Erstgespräch",
+                        dcc.Markdown(
+                            "Kostenfreies Erstgespräch",
+                            style={
+                                "font-family": "Georgia",
+                                # "margin-bottom": "20px",
+                                "margin-top": "20px",
+                                "background-color": "#D6DCE5",
+                                "align-self": "center",
+                            },
+                            className="markdown-responsive",
+                        ),
                         variant="outline",
-                        rightIcon=DashIconify(icon="ic:baseline-email"),
+                        rightIcon=DashIconify(icon="ic:baseline-email", width=20),
                         color="lightgray",
                         style={
                             "font-family": "Georgia",
@@ -185,19 +322,33 @@ class FrontEndLayout(DashBasePage):
     def _landing_page_text(self):
         return dbc.Container(
             [
-                dbc.Row(
-                    dcc.Markdown(
-                        """Ich coache, um Sie bei herausfordernden Situationen systemisch zu unterstützen.  \n  \n Gemeinsam betrachten wir Ihre Situation „von außen“. Mit dem damit gewonnenen Abstand erlangen Sie neue Perspektiven. Und damit einhergehend eine Erweiterung Ihrer Handlungs-, Denk- und Haltungsoptionen. \n  \n Häufig leiten uns Glaubenssätze, angelernte Verhaltens- und Denkmuster. Diese sind so tief verwurzelt, dass wir sie nicht hinterfragen. Genau hier setze ich an. Durch systemische Fragetechniken und Methoden fördere ich die Selbstreflektion. So finden wir „innere blinde Flecken“, die ihre Haltung und Handlung beeinflussen. Erst wenn diese sichtbar werden, haben Sie die Chance, den Umgang mit ihnen aktiv zu gestalten. \n \n Ich coache nach dem systemisch-konstruktivistischen Ansatz. Methoden aus verschiedenen Ansätzen, zum Beispiel aus der Gestaltung, finden bei mir Anwendung. Damit verfolge ich eine wissenschaftlich fundierte Herangehensweise im Coaching. \n \n Ich freue mich darauf, Sie bei einem unverbindlichen Kennenlerngespräch näher kennen zu lernen! \n \n Ihre Beatrice Koch""",
-                        style={
-                            "font-family": "Georgia",
-                            "margin-bottom": "20px",
-                            "margin-top": "20px",
-                        },
-                        className="markdown-responsive",
-                    )
-                ),
+                dcc.Markdown(
+                    [
+                        """Ich coache, um Sie bei herausfordernden Situationen systemisch zu unterstützen.""",
+                        """  \n  \n Gemeinsam betrachten wir Ihre Situation „von außen“. Mit dem damit gewonnenen Abstand erlangen Sie neue Perspektiven. Und damit einhergehend eine Erweiterung Ihrer Handlungs-, Denk- und Haltungsoptionen.""",
+                        """ \n \n Ich coache nach dem systemisch-konstruktivistischen Ansatz. Methoden aus verschiedenen Ansätzen, zum Beispiel aus der Gestaltung, finden bei mir Anwendung. Damit verfolge ich eine wissenschaftlich fundierte Herangehensweise im Coaching.""",
+                        """ \n \n Ich freue mich darauf, Sie bei einem unverbindlichen Kennenlerngespräch näher kennen zu lernen!""",
+                        """ \n \n Ihre _Beatrice Koch_""",
+                    ],
+                    style={
+                        "font-family": "Georgia",
+                        # "margin-bottom": "20px",
+                        "margin-top": "20px",
+                        "background-color": "#D6DCE5",
+                        "align-self": "center",
+                    },
+                    className="markdown-responsive",
+                )
             ],
             fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": "#D6DCE5",
+                # "width": "100%",
+                # "height": "100%",
+                "align-self": "center",
+            },
         )
 
     def _carousel(self):
@@ -217,20 +368,253 @@ class FrontEndLayout(DashBasePage):
     def _accordion(self):
         return dmc.Accordion(
             disableChevronRotation=True,
+            # variant="contained",
+            className="g0",
             children=[
                 dmc.AccordionItem(
                     [
                         dmc.AccordionControl(
-                            "Ablauf eines Coachings",
+                            "01 - Unverbindliches Kennenlern-Gespräch",
                             icon=DashIconify(
                                 icon="icon-park-solid:info",
-                                color=dmc.theme.DEFAULT_COLORS["blue"][6],
-                                width=20,
+                                # color=dmc.theme.DEFAULT_COLORS["blue"][6],
+                                width=25,
                             ),
                         ),
-                        dmc.AccordionPanel(self._carousel()),
+                        dmc.AccordionPanel(
+                            self._accordion_grid(
+                                self.accordion_image1(), self.accordion_content(self._accordion_item1_text())
+                            )
+                        ),
                     ],
-                    value="info",
+                    value="info1",
+                ),
+                dmc.AccordionItem(
+                    [
+                        dmc.AccordionControl(
+                            "02 - Sitzungen",
+                            icon=DashIconify(
+                                icon="icon-park-solid:info",
+                                # color=dmc.theme.DEFAULT_COLORS["blue"][6],
+                                width=25,
+                            ),
+                        ),
+                        dmc.AccordionPanel(
+                            self._accordion_grid(
+                                self.accordion_image2(), self.accordion_content(self._accordion_item2_text())
+                            )
+                        ),
+                    ],
+                    value="info2",
+                ),
+                dmc.AccordionItem(
+                    [
+                        dmc.AccordionControl(
+                            "03 - Optionales Abschlussgespräch",
+                            icon=DashIconify(
+                                icon="icon-park-solid:info",
+                                # color=dmc.theme.DEFAULT_COLORS["blue"][6],
+                                width=25,
+                            ),
+                        ),
+                        dmc.AccordionPanel(
+                            self._accordion_grid(
+                                self.accordion_image3(), self.accordion_content(self._accordion_item3_text())
+                            )
+                        ),
+                    ],
+                    value="info3",
                 ),
             ],
+            style={"width": "100%"},
+        )
+
+    def _divider(self):
+        return [
+            dbc.Row(
+                [
+                    dmc.Divider(
+                        variant="solid",
+                        # color="red",
+                        className="g-0",
+                        style={
+                            "margin-bottom": "20px",
+                            "margin-top": "20px",
+                            "background-color": "white",
+                            #    "align": "center",
+                            #    "justify": "center",
+                        },
+                    )
+                ],
+                justify="center",
+                align="center",
+            )
+        ]
+
+    def accordion_content(self, content):
+        return (
+            dmc.Card(
+                dmc.CardSection(
+                    self._accordion_text(content),
+                    inheritPadding=True,
+                    className="d-flex justify-content-center align-content-center",
+                    style={"align": "center", "background-color": accordion_color},
+                ),
+                style={
+                    "width": "100%",
+                    "height": "100%",
+                    "align-self": "center",
+                    "background-color": accordion_color,
+                    "justify-content": "center",
+                },
+            ),
+        )
+
+    def accordion_image(self, image):
+        return dmc.Image(
+            src=image,
+            style={
+                "width": "100%",
+                "height": "100%",
+                "align-self": "center",
+                "background-color": accordion_color,
+                "justify-content": "center",
+            },
+        )
+
+    def accordion_image1(self):
+        return self.path + "assets/01.png"
+
+    def accordion_image2(self):
+        return self.path + "assets/02.png"
+
+    def accordion_image3(self):
+        return self.path + "assets/03.png"
+
+    def accordion_card(self):
+        return dmc.Card(
+            [
+                dmc.CardSection(
+                    self._accordion_header(),
+                    inheritPadding=False,
+                    className="d-flex justify-content-center align-content-center",
+                    style={
+                        "align": "center",
+                        "background-color": "#D6DCE5",
+                        "margin-top": "10px",
+                    },
+                ),
+                dmc.CardSection(
+                    self._accordion(),
+                    # py="xl",
+                    style={
+                        "align": "center",
+                        "background-color": "#D6DCE5",
+                    },
+                    inheritPadding=False,
+                ),
+            ],
+            style={
+                "align-self": "center",
+                "background-color": "#D6DCE5",
+                "justify-content": "center",
+            },
+        )
+
+    def _accordion_header(self):
+        return dbc.Row(
+            dbc.Col(
+                dcc.Markdown(
+                    """#### Ablauf eines Coachings""",
+                    style={
+                        "font-family": "Georgia",
+                        "align": "left",
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "margin-bottom": "-20px",
+                        "margin-top": "20px",
+                        "margin-right": "-20px",
+                        "margin": "0px",
+                        "line-height": "1.1",
+                        # "display": "flex",
+                        "justify-content": "center",
+                    },
+                    # className="markdown-responsive align-content-center justify-content-center",
+                ),
+                align="center",
+                className="align-content-center justify-content-center",
+            ),
+            justify="center",
+            className="align-content-center justify-content-center",
+        )
+
+    def _accordion_text(self, text):
+        return dbc.Container(
+            dcc.Markdown(
+                text,
+                style={
+                    "font-family": "Georgia",
+                    # "margin-bottom": "20px",
+                    # "margin-top": "20px",
+                    "background-color": accordion_color,
+                    "width": "100%",
+                    "height": "100%",
+                    "align-self": "center",
+                },
+                className="markdown-responsive",
+            ),
+            fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": accordion_color,
+                "width": "100%",
+                "height": "100%",
+                "align-self": "center",
+            },
+        )
+
+    def _accordion_item1_text(self):
+        return [
+            """Bevor Sie sich entscheiden, lernen wir uns kennen.""",
+            """  \n  \n Das Gespräch dauert ca. 30min und kann telefonisch, per Video-Telefonie oder in Präsenz stattfinden.""",
+            """ \n \n Nach dem Gespräch haben Sie:""",
+            """ \n* Ein Gefühl für meine Arbeitsweise.""",
+            """ \n* Antworten zu inhaltlichen, organisatorischen und sonstigen Fragen.""",
+            """ \n* Eine Vorstellung, wie wir Ihr Anliegen in den Sitzungen behandeln.""",
+        ]
+
+    def _accordion_item2_text(self):
+        return [
+            """Jedes Anliegen ist so persönlich und individuell wie ihr Träger. Daher biete ich keine vordefinierten Pakete an.""",
+            """  \n  \n Informationen zu den Sitzungen:""",
+            """ \n* 50 oder 90min – wir entscheiden gemeinsam.""",
+            """ \n* Die Frequenz variiert je nach Anliegen.""",
+            """ \n 2-3 Sitzungen mit kürzerem Abstand sind z.B. bei akuten Phasen hilfreich. Bei einer Begleitung sind größere zeitliche Abständen mit mehr Zeit zur Erfahrung und Anwendung der Erkenntnisse im Alltag zielführend.""",
+            """ \n* Die Sitzungen können digital, in Präsenz oder hybrid („mal so, mal so“) stattfinden.""",
+        ]
+
+    def _accordion_item3_text(self):
+        return [
+            """Eine Abschlusssitzung ist vor allem bei längeren Veränderungsphasen hilfreich.""",
+            """ \n \n Hier reflektieren wir Ihre Entwicklungsschritte und gehen die Erkenntnisse der Sitzungen nochmal gemeinsam durch.""",
+            """  \n  \n Gerade im beruflichen Kontext ist es sinnvoll, die Führungskraft und Personalverantwortlichen sowohl vorab, als auch zur Abschlusssitzung einzubeziehen. So stellen wir eine Unterstützung Ihres beruflichen Umfelds während und nach des Coachings sicher.""",
+        ]
+
+    def _accordion_grid(self, image, content):
+        return dmc.SimpleGrid(
+            cols=1,
+            children=[self.accordion_image(image), content[0]],
+            # mt="sm",
+            breakpoints=[
+                {"minWidth": 1001, "maxWidth": 10000, "cols": 2},
+                {"minWidth": 600, "maxWidth": 1000, "cols": 1},
+            ],
+            style={
+                "align-self": "center",
+                "width": "100%",
+                "height": "100%",
+                "justify-content": "center",
+                "background-color": accordion_color,
+            },
         )
