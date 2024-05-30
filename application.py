@@ -1,5 +1,7 @@
 import logging
-from src.apps import home, aboutme, individual, company, contact
+import dash
+from requests import head
+from src.apps import home, aboutme, individual, company, contact, references
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
@@ -11,7 +13,8 @@ from src.app import app, server
 
 # logging.config.fileConfig("logging.ini", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
-font_definition = {"font-family": "Georgia", "color": "black"}
+text = {"font-family": "Karla", "color": "black"}
+headline = {"font-family": "Karla", "color": "black", "font-size": "20px"}
 
 
 class Navigation(DashBasePage):
@@ -21,12 +24,22 @@ class Navigation(DashBasePage):
         self.path = ""
         self.app.callback(Output("page-content", "children"), [Input("url", "pathname")])(self.display_page)
 
-        for i in [2]:
-            self.app.callback(
-                Output(f"navbar-collapse{i}", "is_open"),
-                [Input(f"navbar-toggler{i}", "n_clicks")],
-                [State(f"navbar-collapse{i}", "is_open")],
-            )(self.toggle_navbar_collapse)
+        self.app.callback(
+            Output(f"navbar-collapse2", "is_open"),
+            [Input(f"navbar-toggler2", "n_clicks")],
+            [State(f"navbar-collapse2", "is_open")],
+        )(self.toggle_navbar_collapse)
+
+        self.app.callback(
+            Output(f"timeline", "active"),
+            [
+                Input(f"info1", "aria-expanded"),
+                Input(f"info2", "is_open"),
+                Input(f"info3", "is_open"),
+            ],
+        )(self.timeline_toggler)
+        self.register_callbacks(self.app)
+        logging.info(dash.callback_context)
 
     def layout(self):
         return dbc.Container(
@@ -36,12 +49,16 @@ class Navigation(DashBasePage):
                         dbc.Row(
                             [
                                 dmc.Title(
-                                    f"Veränderungen annehmen, angehen und gestalten.",
+                                    f"Veränderungen annehmen, angehen und gestalten.".upper(),
                                     order=2,
                                     color="white",
                                     align="center",
                                     weight=0,
-                                    style={"background": "#A1AAA5", "font-family": "Georgia", "font-weight": "normal"},
+                                    style={
+                                        "background": "#A1AAA5",
+                                        "font-family": headline["font-family"],
+                                        "font-weight": "normal",
+                                    },
                                 )
                             ]
                         ),
@@ -67,8 +84,13 @@ class Navigation(DashBasePage):
                                                     ),
                                                     id="navbar-collapse2",
                                                     navbar=True,
-                                                    className="d-flex justify-content-around",
+                                                    # className="d-flex justify-content-around",
                                                     # dimension="width",
+                                                    style={
+                                                        "align": "center",
+                                                        "background-color": "white",
+                                                        "justify-content": "center",
+                                                    },
                                                 ),
                                             ],
                                         ),
@@ -76,15 +98,21 @@ class Navigation(DashBasePage):
                                         # light=True,
                                         color="white",
                                         # className="d-flex justify-content-center",
-                                        # style={"align": "center", "background-color": "white"},
+                                        style={
+                                            "align": "center",
+                                            "background-color": "white",
+                                            "justify-content": "center",
+                                        },
                                     ),
                                 ],
                                 width={"size": 10},
                                 align="center",
                             ),
                             justify="center",
+                            style={
+                                "margin-bottom": "0px",
+                            },
                         ),
-                        dmc.Divider(variant="solid"),
                     ],
                 ),
                 html.Div(id="page-content"),
@@ -98,45 +126,45 @@ class Navigation(DashBasePage):
                 dbc.NavLink(
                     "Home",
                     href="/home",
-                    style=font_definition,
+                    style=headline,
                 )
             ),
             dbc.NavItem(
                 dbc.NavLink(
                     "Über mich",
                     href="/aboutme",
-                    style=font_definition,
+                    style=headline,
                 )
             ),
             dbc.NavItem(
                 dbc.NavLink(
                     "Privatperson",
                     href="/individual",
-                    style=font_definition,
+                    style=headline,
                 )
             ),
             dbc.NavItem(
                 dbc.NavLink(
                     "Führungskraft/Unternehmer",
                     href="/company",
-                    style=font_definition,
+                    style=headline,
                 )
             ),
             dbc.NavItem(
                 dbc.NavLink(
                     "Kontakt",
                     href="/contact",
-                    style=font_definition,
+                    style=headline,
                 )
             ),
         ]
 
     def display_page(self, pathname):
         print(pathname)
+        print(f" {dash.callback_context.inputs}")
         if pathname == "/home":
             return home.layout
         if pathname == "/aboutme":
-            print("True")
             return aboutme.layout
         if pathname == "/individual":
             return individual.layout
@@ -144,12 +172,32 @@ class Navigation(DashBasePage):
             return company.layout
         if pathname == "/contact":
             return contact.layout
+        if pathname == "/references":
+            return references.layout
         return home.layout
 
     def toggle_navbar_collapse(self, n, is_open):
-        if n:
+        print("navbar_toggler")
+        print(f" {dash.callback_context.args_grouping}")
+        print(f" {dash.callback_context.inputs}")
+        changed_id = [p["prop_id"] for p in dash.callback_context.triggered][0]
+        if "navbar-toggler2" in changed_id:
             return not is_open
         return is_open
+
+    def timeline_toggler(self, info1, info2, info3):
+        print("timeline_toggler")
+        print(f" {dash.callback_context.args_grouping}")
+        changed_id = [p["prop_id"] for p in dash.callback_context.triggered]
+        print(f"changed_id: {changed_id}")
+        active = 0
+        if "info1" in changed_id:
+            active = 1
+        elif "info2" in changed_id:
+            active = 2
+        elif "info3" in changed_id:
+            active = 3
+        return active
 
 
 page = Navigation()

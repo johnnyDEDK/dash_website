@@ -6,16 +6,17 @@
 /* styles.css */
 .markdown-responsive {
     font-size: 18px !important;
-    ;
-    /* Default font size */
-}
+    font-family: "Spectral", serif;
+        ;
+            /* Default font size */
+        }
 
 .dmc-image {
     max-width: 100%;
     height: auto;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 1024px) {
     .dmc-image {
         max-width: 500px;
         /* Adjust as needed */
@@ -25,21 +26,44 @@
 @media (max-width: 768px) {
     .markdown-responsive {
         font-size: 16px !important;
+        font-family: "Spectral", serif;
         ;
         /* Smaller font size for smaller screens */
     }
+                .markdown-responsive-small {
+                    font-size: 12px !important;
+                    font-family: "Spectral", serif;
+                    ;
+                    /* Medium font size for medium screens */
+                }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
     .markdown-responsive {
         font-size: 20px !important;
-        ;
+        font-family: "Spectral", serif;
+            ;
+            /* Medium font size for medium screens */
+        }
+        
+        .markdown-responsive-small {
+            font-size: 16px !important;
+            font-family: "Spectral", serif;
+    ;
         /* Medium font size for medium screens */
     }
 }
 @media (min-width: 1025px) and (max-width: 6024px) {
     .markdown-responsive {
         font-size: 22px !important;
+        font-family: "Spectral", serif;
+            ;
+            /* Medium font size for medium screens */
+        }
+        
+        .markdown-responsive-small {
+            font-size: 18px !important;
+            font-family: "Spectral", serif;
         ;
         /* Medium font size for medium screens */
     }

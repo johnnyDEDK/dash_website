@@ -10,7 +10,10 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-accordion_color = "#D6DCE5"  # "#F8F9FA"
+card_color = "#EDEBE7"
+accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
+textfont = {"font-family": "Karla", "color": "black"}
+headline = {"font-family": "Karla", "color": "black"}
 
 
 class PrivatePerson(DashBasePage):
@@ -25,7 +28,7 @@ class PrivatePerson(DashBasePage):
     def _layout_body(self):
         return dmc.MantineProvider(
             theme={
-                "fontFamily": "Georgia",
+                "fontFamily": textfont["font-family"],
                 "primaryColor": "dark",
                 "components": {
                     "Button": {"styles": {"root": {"fontWeight": 400}}},
@@ -48,7 +51,7 @@ class PrivatePerson(DashBasePage):
                                     xxl={"size": 7},  # , "offset": 1},
                                     style={
                                         "align-self": "center",
-                                        "background-color": "#D6DCE5",
+                                        "background-color": card_color,
                                         "justify-content": "center",
                                     },
                                     align="center",
@@ -74,6 +77,18 @@ class PrivatePerson(DashBasePage):
             dmc.Card(
                 children=[
                     dmc.CardSection(
+                        self._divider_top(),
+                        withBorder=False,
+                        # inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "top",
+                            "background-color": "white",
+                            # "margin-top": "-20px",
+                        },
+                    ),
+                    dmc.CardSection(
                         children=[
                             dmc.SimpleGrid(
                                 cols=1,
@@ -86,7 +101,7 @@ class PrivatePerson(DashBasePage):
                                 style={
                                     "align-self": "center",
                                     "justify-content": "center",
-                                    "background-color": "#D6DCE5",
+                                    "background-color": card_color,
                                 },
                             ),
                         ],
@@ -99,7 +114,7 @@ class PrivatePerson(DashBasePage):
                             # "height": "100%",
                             "align-self": "center",
                             "justify-content": "center",
-                            "background-color": "#D6DCE5",
+                            "background-color": card_color,
                         },
                     ),
                     dmc.CardSection(
@@ -124,7 +139,7 @@ class PrivatePerson(DashBasePage):
                             # "height": "100%",
                             "align-self": "center",
                             "justify-content": "center",
-                            "background-color": "#D6DCE5",
+                            "background-color": card_color,
                         },
                     ),
                     dmc.CardSection(
@@ -151,7 +166,7 @@ class PrivatePerson(DashBasePage):
                                 style={
                                     "align-self": "center",
                                     "justify-content": "end",
-                                    "background-color": "#D6DCE5",
+                                    "background-color": card_color,
                                 },
                             ),
                         ],
@@ -164,7 +179,32 @@ class PrivatePerson(DashBasePage):
                             # "height": "100%",
                             "align-self": "center",
                             "justify-content": "end",
-                            "background-color": "#D6DCE5",
+                            "background-color": card_color,
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._divider(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "center",
+                            "background-color": "white",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._layout_cardfooter(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr=0,
+                        style={
+                            # "width": "100%",
+                            # "height": "100%",
+                            "align-self": "top",
+                            "justify-content": "center",
+                            "background-color": "white",
                         },
                     ),
                 ],
@@ -176,7 +216,7 @@ class PrivatePerson(DashBasePage):
                     "width": "100%",
                     "height": "100%",
                     "align-self": "center",
-                    "background-color": "#D6DCE5",
+                    "background-color": card_color,
                     "justify-content": "center",
                 },
                 # className="d-flex justify-content-center",
@@ -195,7 +235,7 @@ class PrivatePerson(DashBasePage):
                     "maxWidth": "800px",
                     "height": "100%",
                     "align-self": "center",
-                    "background-color": "#D6DCE5",
+                    "background-color": card_color,
                     "justify-content": "center",
                     "@media screen and (min-width: 768px)": {"maxWidth": "500px", "height": "auto"},
                 },
@@ -206,14 +246,14 @@ class PrivatePerson(DashBasePage):
                         self._header_list(),
                         inheritPadding=True,
                         className="d-flex justify-content-center align-content-center",
-                        style={"align": "center", "background-color": "#D6DCE5", "margin-top": "20px"},
+                        style={"align": "center", "background-color": card_color, "margin-top": "20px"},
                     ),
                     dmc.CardSection(
                         self._free_contact(),
                         # py="xl",
                         style={
                             "align": "center",
-                            "background-color": "#D6DCE5",
+                            "background-color": card_color,
                         },
                         inheritPadding=True,
                     ),
@@ -222,7 +262,7 @@ class PrivatePerson(DashBasePage):
                     "width": "100%",
                     "height": "100%",
                     "align-self": "center",
-                    "background-color": "#D6DCE5",
+                    "background-color": card_color,
                     "justify-content": "center",
                 },
             ),
@@ -273,7 +313,7 @@ class PrivatePerson(DashBasePage):
                         """\n* Sie sind bereits aktiv in einer Veränderungsphase und möchten dabei begleitet werden.""",
                     ],
                     style={
-                        "font-family": "Georgia",
+                        "font-family": textfont["font-family"],
                         "align": "left",
                         "overflow": "hidden",
                         "textOverflow": "ellipsis",
@@ -301,7 +341,7 @@ class PrivatePerson(DashBasePage):
                 "justifyContent": "center",
                 "alignItems": "center",
                 "margin-bottom": "20px",
-                "background-color": "#D6DCE5",
+                "background-color": card_color,
             },
             children=[
                 dmc.Anchor(
@@ -309,10 +349,10 @@ class PrivatePerson(DashBasePage):
                         dcc.Markdown(
                             "Kostenfreies Erstgespräch",
                             style={
-                                "font-family": "Georgia",
+                                "font-family": textfont["font-family"],
                                 # "margin-bottom": "20px",
                                 "margin-top": "20px",
-                                "background-color": "#D6DCE5",
+                                "background-color": card_color,
                                 "align-self": "center",
                             },
                             className="markdown-responsive",
@@ -321,7 +361,7 @@ class PrivatePerson(DashBasePage):
                         rightIcon=DashIconify(icon="ic:baseline-email", width=20),
                         color="lightgray",
                         style={
-                            "font-family": "Georgia",
+                            "font-family": textfont["font-family"],
                             "align": "center",
                         },
                     ),
@@ -345,10 +385,10 @@ class PrivatePerson(DashBasePage):
                         """ \n \n In den Coaching-Sessions schauen wir uns gemeinsam Ihre Situation an und analysieren, was genau Sie herausfordert. Ob, und wenn ja, welche Ängste oder Glaubenssätze zu Grunde liegen, die es Ihnen schwer machen, die Veränderung anzunehmen oder anzugehen. Im nächsten Schritt erörtern wir Handlungsoptionen, die Sie ohne Coaching vielleicht nicht gesehen hätten. Und Sie entscheiden schlussendlich, welchen Weg Sie gehen wollen.""",
                     ],
                     style={
-                        "font-family": "Georgia",
+                        "font-family": textfont["font-family"],
                         "margin-bottom": "20px",
                         "margin-top": "20px",
-                        "background-color": "#D6DCE5",
+                        "background-color": card_color,
                         "align-self": "center",
                     },
                     className="markdown-responsive",
@@ -358,7 +398,7 @@ class PrivatePerson(DashBasePage):
             style={
                 # "margin-bottom": "20px",
                 # "margin-top": "20px",
-                "background-color": "#D6DCE5",
+                "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",
                 "align-self": "center",
@@ -387,6 +427,27 @@ class PrivatePerson(DashBasePage):
             )
         ]
 
+    def _divider_top(self):
+        return [
+            dbc.Row(
+                [
+                    dmc.Divider(
+                        variant="solid",
+                        # color="red",
+                        className="g-0",
+                        style={
+                            "margin-bottom": "20px",
+                            "background-color": "white",
+                            #    "align": "center",
+                            "justify": "start",
+                        },
+                    )
+                ],
+                justify="start",
+                align="center",
+            )
+        ]
+
     def _third_row(self):
         return [
             dmc.Card(
@@ -395,14 +456,14 @@ class PrivatePerson(DashBasePage):
                         self._third_card_text(),
                         inheritPadding=True,
                         className="d-flex justify-content-center align-content-center",
-                        style={"align": "center", "background-color": "#D6DCE5", "margin-top": "20px"},
+                        style={"align": "center", "background-color": card_color, "margin-top": "20px"},
                     ),
                     dmc.CardSection(
                         self._free_contact(),
                         # py="xl",
                         style={
                             "align": "center",
-                            "background-color": "#D6DCE5",
+                            "background-color": card_color,
                         },
                         inheritPadding=True,
                     ),
@@ -411,7 +472,7 @@ class PrivatePerson(DashBasePage):
                     # "width": "100%",
                     # "height": "100%",
                     "align-self": "center",
-                    "background-color": "#D6DCE5",
+                    "background-color": card_color,
                     "justify-content": "center",
                 },
             ),
@@ -425,7 +486,7 @@ class PrivatePerson(DashBasePage):
                             "maxWidth": "800px",
                             "height": "100%",
                             "align-self": "center",
-                            "background-color": "#D6DCE5",
+                            "background-color": card_color,
                             "justify-content": "center",
                             "@media screen and (min-width: 768px)": {"maxWidth": "500px", "height": "auto"},
                         },
@@ -436,7 +497,7 @@ class PrivatePerson(DashBasePage):
                 style={
                     # "margin-bottom": "20px",
                     # "margin-top": "20px",
-                    "background-color": "#D6DCE5",
+                    "background-color": card_color,
                     # "width": "100%",
                     # "height": "100%",
                     "align-self": "center",
@@ -454,10 +515,10 @@ class PrivatePerson(DashBasePage):
                         """ \n „Privatpersonen“ dient hier lediglich zur Abgrenzung gegenüber Führungskräften und UnternehmerInnen, die mit ihrem Team eine Veränderungsphase anstreben bzw. durchleben und dabei professionelle Unterstützung wünschen.""",
                     ],
                     style={
-                        "font-family": "Georgia",
+                        "font-family": textfont["font-family"],
                         "margin-bottom": "20px",
                         "margin-top": "20px",
-                        "background-color": "#D6DCE5",
+                        "background-color": card_color,
                         "align-self": "center",
                     },
                     className="markdown-responsive",
@@ -467,9 +528,67 @@ class PrivatePerson(DashBasePage):
             style={
                 # "margin-bottom": "20px",
                 # "margin-top": "20px",
-                "background-color": "#D6DCE5",
+                "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",
                 "align-self": "center",
             },
+        )
+
+    def _layout_cardfooter(self):
+        return dbc.Container(
+            dmc.Card(
+                [
+                    dmc.CardSection(
+                        [
+                            self._footer(self._footer_text1()),
+                            self._footer(self._footer_text2()),
+                        ],
+                        inheritPadding=False,
+                        className="d-flex justify-content-evenly align-content-top",
+                        style={
+                            "align": "top",
+                            "background-color": "white",
+                            # "margin-top": "10px",
+                        },
+                    )
+                ],
+                style={
+                    "align-self": "top",
+                    "background-color": "white",
+                    "justify-content": "center",
+                },
+            ),
+            fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": "white",
+                "align-self": "top",
+            },
+        )
+
+    def _footer_text1(self):
+        return [
+            """[Referenzen](/references)""",
+        ]
+
+    def _footer_text2(self):
+        return [
+            """[Impressum](/references)""",
+        ]
+
+    def _footer(self, text):
+        return dcc.Markdown(
+            text,
+            style={
+                "font-family": textfont["font-family"],
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": "white",
+                "width": "100%",
+                "height": "100%",
+                "align-self": "top",
+            },
+            className="d-flex justify-content-evenly align-content-evenly markdown-responsive",
         )
