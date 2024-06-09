@@ -1,11 +1,16 @@
 # package imports
+import logging
 import dash
 from dash import html
 from ..ui.layout import FrontEndLayout
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 from dash import dcc
-
+logger = logging.getLogger(__name__)
+card_color = "#EDEBE7"
+accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
+textfont = {"font-family": "Karla", "color": "black"}
+headline = {"font-family": "Karla", "color": "black"}
 
 class Empty(FrontEndLayout):
     def __init__(self):
@@ -51,14 +56,75 @@ class Empty(FrontEndLayout):
         )
 
     def _layout_body_card(self):
-        return dbc.Card(
-            children=[
-                dbc.CardBody(children=self._empty_page_text()),
-            ],
-            color="ligth",
-            outline=False,
-            # style={"height": "80vh"},
-        )
+        return [
+            dmc.Card(
+                children=[
+                    dmc.CardSection(
+                        self._divider_top(),
+                        withBorder=False,
+                        # inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "top",
+                            "background-color": "white",
+                            # "margin-top": "-20px",
+                        },
+                    ),
+                    dmc.CardSection(
+                        children=self._empty_page_text(),
+                        withBorder=True,
+                        inheritPadding=False,
+                        # mr=0,
+                        # ml=0,
+                        style={
+                            # "width": "100%",
+                            # "height": "100%",
+                            "align-self": "center",
+                            "justify-content": "center",
+                            "background-color": card_color,
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._divider(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "center",
+                            "background-color": "white",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._layout_cardfooter(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr=0,
+                        style={
+                            # "width": "100%",
+                            # "height": "100%",
+                            "align-self": "top",
+                            "justify-content": "center",
+                            "background-color": "white",
+                        },
+                    ),
+                ],
+                withBorder=False,
+                # shadow="sm",
+                # radius="md",
+                # mr=0,
+                style={
+                    "width": "100%",
+                    "height": "100%",
+                    "align-self": "center",
+                    "background-color": card_color,
+                    "justify-content": "center",
+                },
+                # className="d-flex justify-content-center",
+            )
+        ]
 
     def _empty_page_text(self):
         return dbc.Container(
@@ -66,7 +132,13 @@ class Empty(FrontEndLayout):
                 dbc.Row(
                     dcc.Markdown(
                         """Leider existiert diese Seite noch nicht!""",
-                        style={"font-family": "Georgia", "font-size": "3rem", "text-align": "center"},
+                        style={
+                            "font-family": textfont["font-family"],
+                            "text-align": "center",
+                            "background-color": card_color,
+                            "margin-top": "20px",
+                        },
+                        className="markdown-responsive",
                     )
                 ),
             ],

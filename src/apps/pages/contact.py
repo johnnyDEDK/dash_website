@@ -7,6 +7,7 @@ from dash import dcc
 from dash import html
 
 import logging
+import os
 
 
 logger = logging.getLogger(__name__)
@@ -16,7 +17,7 @@ textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
 
 
-class AboutMe(FrontEndLayout):
+class Contact(FrontEndLayout):
     def __init__(self, **kwargs):
         logger.debug("Start init Layout.__init__()")
         super().__init__()
@@ -89,54 +90,11 @@ class AboutMe(FrontEndLayout):
                         },
                     ),
                     dmc.CardSection(
-                        children=[
-                            dmc.SimpleGrid(
-                                cols=1,
-                                children=self._layout_cardheader_second_row(
-                                    image="assets/aboutme.png",
-                                    text_content=self._header_list(text1=[""], text2=self.header_text_2()),
-                                ),
-                                # mt="sm",
-                                breakpoints=[
-                                    {"minWidth": 1001, "maxWidth": 10000, "cols": 2},
-                                    {"minWidth": 600, "maxWidth": 1000, "cols": 1},
-                                ],
-                                style={
-                                    "align-self": "center",
-                                    "justify-content": "center",
-                                    "background-color": card_color,
-                                },
-                            ),
-                        ],
+                        children=self.form(),
                         withBorder=True,
                         inheritPadding=False,
                         # mr=0,
                         # ml=0,
-                        style={
-                            # "width": "100%",
-                            # "height": "100%",
-                            "align-self": "center",
-                            "justify-content": "center",
-                            "background-color": card_color,
-                        },
-                    ),
-                    dmc.CardSection(
-                        self._divider(),
-                        withBorder=False,
-                        inheritPadding=True,
-                        # mt="sm",
-                        # mr="sm",
-                        style={
-                            "align": "center",
-                            "background-color": "white",
-                        },
-                    ),
-                    dmc.CardSection(
-                        self._layout_cardbody(),
-                        withBorder=True,
-                        inheritPadding=True,
-                        # mt="sm",
-                        # mr=0,
                         style={
                             # "width": "100%",
                             # "height": "100%",
@@ -186,57 +144,131 @@ class AboutMe(FrontEndLayout):
             )
         ]
 
-    def _layout_cardbody(self):
-        return [
-            self._layout_cardbody_first_row(),
-            self._layout_cardbody_second_row(),
-        ]
-
-    def _layout_cardbody_first_row(self):
-        return dbc.Row([self._main_text()])
-
-    def _layout_cardbody_second_row(self):
-        return dbc.Row([self._free_contact()])
-
-    def header_text_2(self):
-        return [
-            """\n* Meine Stärke ist es, Menschen und Teams bei Ihrer Weiterentwicklung zu unterstützen.""",
-            """\n* Mich motiviert die Veränderung – daher arbeite ich gerne in einem Umfeld, das bestehende Strukturen herausfordert.""",
-            """\n* Meine ehrliche Neugier lässt mich Fragen stellen, die Sie bei Ihrer Reflektion unterstützen.""",
-        ]
-
-    def _main_text(self):
-        return dbc.Container(
+    def form(self):
+        return dmc.Card(
             [
-                dcc.Markdown(
+                self.alert(),
+                self.alert_error(),
+                dbc.Form(
                     [
-                        """Über mich:""",
-                        """ \n* Geboren und aufgewachsen in Freiburg im Breisgau""",
-                        """ \n* Studium der (internationalen) Betriebswirtschaftslehre in Nürnberg, Kolumbien und Passau""",
-                        """ \n* Aufnahme in einem Nachwuchsförderprogramm eines DAX-Konzerns in 2016. Seitdem habe ich mich in den Bereichen Digitales Produktmanagement und Kommunikation spezialisiert. In den vergangenen Jahren habe ich häufig international gearbeitet (China, USA, Südafrika) und Führungs- und Projektverantwortung übernommen.""",
-                        """ \n* Bereits während meines Studiums habe ich mich viel mit dem Thema verantwortungsvolles Führen beschäftigt, z.B. im Rahmen des Stipendiums der Bayerischen EliteAkademie und Teilnahme der Sommerakademie Führung und Persönlichkeit""",
-                        """ \n* 2023 Beginn der Systemischen Coaching Ausbildung bei artop, Institut an der Humboldt-Universität zu Berlin, Abschluss April 2024.""",
-                        """ \n _Die Ausbildung ist von Deutschlands führendem Coaching-Verband DBVC anerkannt und existiert seit 2001. Zudem besitzt **artop** den Status Educational Provider for Business Coaching des IOBC, einer in Deutschland registrierten internationalen Organisation für professionelles Coaching mit dem Fokus auf Business Coaching und Leadership._""",
-                        """ \n* Hobbies: Menschen weiterentwickeln, Wandern, Gleitschirmfliegen, Kochen, Backen, Lesen""",
-                        """ \n \n Ich freue mich über ein unverbindliches Kennenlerngespräch mit Ihnen! \n \n""",
-                    ],
-                    style={
-                        "font-family": textfont["font-family"],
-                        "margin-bottom": "20px",
-                        "margin-top": "20px",
-                        "background-color": card_color,
-                        "align-self": "center",
-                    },
-                    className="markdown-responsive",
-                )
+                        self.firstname_input(),
+                        self.lastname_input(),
+                        self.email_input(),
+                        self.text_input(),
+                    ]
+                ),
+                self.submit(),
             ],
-            fluid=True,
+            withBorder=False,
+            # shadow="sm",
+            # radius="md",
+            # mr=0,
             style={
-                # "margin-bottom": "20px",
-                # "margin-top": "20px",
-                "background-color": card_color,
-                # "width": "100%",
-                # "height": "100%",
+                "width": "100%",
+                "height": "100%",
                 "align-self": "center",
+                "background-color": card_color,
+                "justify-content": "center",
             },
+            # className="d-flex justify-content-center",
+        )
+
+    def firstname_input(self):
+        return dbc.Row(
+            html.Div(
+                [
+                    dbc.Label("Vorname"),
+                    dbc.Input(type="firstname", id="firstname", placeholder="Vorname"),
+                ],
+                className="mb-3",
+            )
+        )
+
+    def lastname_input(self):
+        return dbc.Row(
+            html.Div(
+                [
+                    dbc.Label("Nachname"),
+                    dbc.Input(type="lastname", id="lastname", placeholder="Nachname"),
+                ],
+                className="mb-3",
+            )
+        )
+
+    def email_input(self):
+        return dbc.Row(
+            html.Div(
+                [
+                    dbc.Label("Email", html_for="example-email"),
+                    dbc.Input(type="email", id="email", placeholder="E-mail Adresse"),
+                    # dbc.FormText(
+                    #     "Are you on email? You simply have to be these days",
+                    #     color="secondary",
+                    # ),
+                ],
+                className="mb-3",
+            )
+        )
+
+    def text_input(self):
+        return dbc.Row(
+            html.Div(
+                [
+                    dbc.Label("Nachricht", html_for="text"),
+                    dbc.Input(type="text", id="text", placeholder="Was kann ich für Sie tun?"),
+                ],
+                className="mb-3",
+            )
+        )
+
+    def submit(self):
+        return dbc.Row(
+            html.Div(
+                style={
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "alignItems": "center",
+                    "margin-top": "20px",
+                    "margin-bottom": "20px",
+                    "background-color": "card_color",
+                },
+                children=[
+                    dmc.Button(
+                        "Abschicken",
+                        id="submit-button",
+                        variant="outline",
+                        disabled=True,
+                        rightIcon=DashIconify(icon="ic:baseline-email", width=20),
+                        # color="lightgray",
+                        # style={
+                        #     "font-family": headline["font-family"],
+                        #     "align": "center",
+                        #     "color": "black",
+                        #     "font-size": "20px",
+                        #     "background-color": card_color,
+                        #     "box-shadow": "5px 5px 7px rgba(0, 0, 0, 0.6)",
+                        # },
+                    )
+                ],
+            )
+        )
+
+    def alert(self):
+        return dmc.Alert(
+            "Das Kontaktformular wurde erfolgreich verschickt. Ich melde mich in Kürze bei Ihnen.",
+            title="Erfolgreich verschickt!",
+            id="alert-dismiss",
+            color="green",
+            withCloseButton=True,
+            hide=True,
+        )
+
+    def alert_error(self):
+        return dmc.Alert(
+            "Ein Problem ist aufgeteten. Bitte schicken Sie Ihre Nachricht per Email an kontakt@beas-coaching.de.",
+            title="Error!",
+            id="alert-dismiss_error",
+            color="red",
+            withCloseButton=True,
+            hide=True,
         )

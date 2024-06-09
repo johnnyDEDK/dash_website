@@ -5,6 +5,7 @@ from pytest import mark
 from requests import head
 from ..utils.dash_base_template import DashBasePage
 
+from typing import Tuple
 from dash import dcc
 from dash import html
 
@@ -95,7 +96,9 @@ class FrontEndLayout(DashBasePage):
                         children=[
                             dmc.SimpleGrid(
                                 cols=1,
-                                children=self._layout_cardheader_second_row(),
+                                children=self._layout_cardheader_second_row(
+                                    "assets/IMG_0569.jpg", self._header_list(self.header_text_1(), self.header_text_2())
+                                ),
                                 # mt="sm",
                                 breakpoints=[
                                     {"minWidth": 1001, "maxWidth": 10000, "cols": 2},
@@ -230,13 +233,10 @@ class FrontEndLayout(DashBasePage):
             )
         ]
 
-    def _layout_cardheader(self):
-        return self._layout_cardheader_second_row()
-
-    def _layout_cardheader_second_row(self):
+    def _layout_cardheader_second_row(self, image, text_content):
         return [
             dmc.Image(
-                src=self.path + "assets/Unbenannt.png",
+                src=self.path + image,
                 style={
                     "width": "100%",
                     "maxWidth": "800px",
@@ -250,7 +250,7 @@ class FrontEndLayout(DashBasePage):
             dmc.Card(
                 [
                     dmc.CardSection(
-                        self._header_list(),
+                        text_content,
                         inheritPadding=True,
                         className="d-flex justify-content-center align-content-center",
                         style={"align": "center", "background-color": card_color, "margin-top": "20px"},
@@ -291,36 +291,23 @@ class FrontEndLayout(DashBasePage):
     def _layout_cardbody_third_row(self):
         return dbc.Row(self.accordion_card())
 
-    def _third_header(self):
-        return dmc.Container(
-            dmc.SimpleGrid(
-                cols=1,
-                children=[self._header_list(), self._free_contact()],
-                breakpoints=[
-                    {"minWidth": 980, "maxWidth": 2000, "cols": 1},
-                    {"minWidth": 755, "maxWidth": 979, "cols": 2},
-                    {"minWidth": 600, "maxWidth": 754, "cols": 1},
-                ],
-                verticalSpacing=0,
-                style={
-                    "display": "flex",
-                    "justify-content": "center",
-                },
-            ),
-            size="auto",
-            style={
-                "display": "flex",
-                "justify-content": "center",
-            },
-        )
+    def header_text_1(self):
+        return ["""Sie"""]
 
-    def _header_list(self):
+    def header_text_2(self):
+        return [
+            """\n* stehen Privat oder im Beruf vor einer Veränderung.""",
+            """\n* sind Führungskraft oder Unternehmer und mit ihrem Team im Veränderungsprozess.\n""",
+            """* möchten eine Veränderung in Ihrem Leben erwirken.""",
+        ]
+
+    def _header_list(self, text1, text2):
         return dbc.Row(
             dbc.Col(
                 [
                     dbc.Row(
                         dcc.Markdown(
-                            ["""Sie """],
+                            text1,
                             style={
                                 "font-family": textfont["font-family"],
                                 "align": "left",
@@ -342,11 +329,7 @@ class FrontEndLayout(DashBasePage):
                     ),
                     dbc.Row(
                         dcc.Markdown(
-                            [
-                                """\n* stehen Privat oder im Beruf vor einer Veränderung.""",
-                                """\n* sind Führungskraft oder Unternehmer und mit ihrem Team im Veränderungsprozess.\n""",
-                                """* möchten eine Veränderung in Ihrem Leben erwirken.""",
-                            ],
+                            text2,
                             style={
                                 "font-family": textfont["font-family"],
                                 "align": "left",
@@ -421,7 +404,7 @@ class FrontEndLayout(DashBasePage):
             """Ich coache, um Sie bei herausfordernden Situationen systemisch zu unterstützen.""",
             """  \n  \n Gemeinsam betrachten wir Ihre Situation „von außen“. Mit dem damit gewonnenen Abstand erlangen Sie neue Perspektiven. Und damit einhergehend eine Erweiterung Ihrer Handlungs-, Denk- und Haltungsoptionen.""",
             """ \n \n Ich coache nach dem systemisch-konstruktivistischen Ansatz. Methoden aus verschiedenen Ansätzen, zum Beispiel aus der Gestaltung, finden bei mir Anwendung. Damit verfolge ich eine wissenschaftlich fundierte Herangehensweise im Coaching.""",
-            """ \n \n Ich freue mich darauf, Sie bei einem unverbindlichen Kennenlerngespräch näher kennen zu lernen!""",
+            """ \n \n Ich freue mich darauf, Sie bei einem unverbindlichen Erstgespräch näher kennen zu lernen!""",
             """ \n \n Ihre _Beatrice Koch_""",
         ]
 
@@ -612,7 +595,7 @@ class FrontEndLayout(DashBasePage):
         return self.path + "assets/Kalender2.jpg"
 
     def accordion_image3(self):
-        return self.path + "assets/yes-hand.PNG"
+        return self.path + "assets/yes-hand.png"
 
     def accordion_card(self):
         return dmc.Card(
@@ -625,7 +608,7 @@ class FrontEndLayout(DashBasePage):
                         "align": "center",
                         "background-color": card_color,
                         # "margin-top": "10px",
-                        # "margin-bottom": "20px",
+                        "margin-bottom": "20px",
                     },
                 ),
                 dmc.CardSection(
@@ -739,8 +722,7 @@ class FrontEndLayout(DashBasePage):
                 [
                     dmc.CardSection(
                         [
-                            self._footer(self._footer_text1()),
-                            self._footer(self._footer_text2()),
+                            self._footer(),
                         ],
                         inheritPadding=False,
                         className="d-flex justify-content-evenly align-content-top",
@@ -766,29 +748,13 @@ class FrontEndLayout(DashBasePage):
             },
         )
 
-    def _footer_text1(self):
-        return [
-            """[Referenzen](/references)""",
-        ]
-
-    def _footer_text2(self):
-        return [
-            """[Impressum](/references)""",
-        ]
-
-    def _footer(self, text):
-        return dcc.Markdown(
-            text,
-            style={
-                "font-family": textfont["font-family"],
-                # "margin-bottom": "20px",
-                # "margin-top": "20px",
-                "background-color": "white",
-                "width": "100%",
-                "height": "100%",
-                "align-self": "top",
-            },
-            className="d-flex justify-content-evenly align-content-evenly markdown-responsive",
+    def _footer(self):
+        return dbc.Button(
+            children="Impressum",
+            href="/impressum",
+            className="mb-3",
+            color=card_color,
+            n_clicks=0,
         )
 
     def timeline(self):
@@ -798,43 +764,74 @@ class FrontEndLayout(DashBasePage):
             bulletSize=20,
             lineWidth=2,
             children=[
-                self.timeline_item(
-                    "Unverbindliches Kennenlerngespräch",
+                self.timeline_item_with_button(
+                    "Unverbindliches Erstgespräch",
                     self._accordion_grid(self.accordion_image1(), self.accordion_content(self._accordion_item1_text())),
-                    id="info1",
+                    timelineid="time1",
+                    spoilerid="info1",
                 ),
-                self.timeline_item(
+                self.timeline_item_with_button(
                     "Sitzungen",
                     self._accordion_grid(self.accordion_image2(), self.accordion_content(self._accordion_item2_text())),
-                    id="info2",
+                    timelineid="time2",
+                    spoilerid="info2",
                 ),
-                self.timeline_item(
+                self.timeline_item_with_button(
                     "Optionales Abschlussgespräch",
                     self._accordion_grid(self.accordion_image3(), self.accordion_content(self._accordion_item3_text())),
-                    id="info3",
+                    timelineid="time3",
+                    spoilerid="info3",
+                ),
+                self.timeline_item_with_button(
+                    "",
+                    children="",
+                    timelineid="time4",
+                    spoilerid="info4",
                 ),
             ],
         )
 
-    def timeline_item(self, title, children, id):
+    def timeline_item(self, title, children, timelineid, spoilerid):
         return dmc.TimelineItem(
             title=self.markdown_text(title),
             children=[
                 dmc.Text(
                     [
                         dmc.Spoiler(
-                            showLabel="Show",
+                            showLabel="Show more",
                             hideLabel="Hide",
                             initialState=False,
                             maxHeight=0,
                             children=[children],
-                            id=id,
+                            id=spoilerid,
                         ),
                     ],
                     color="dimmed",
                     # size="sm",
                 ),
             ],
+            id=timelineid,
+            style={"font-family": headline["font-family"], "font-weight": "normal"},
+        )
+
+    def timeline_item_with_button(self, title, children, timelineid, spoilerid):
+        return dmc.TimelineItem(
+            title=self.markdown_text(title),
+            children=[
+                dbc.Button(
+                    id=timelineid,
+                    className="mb-3",
+                    color=card_color,
+                    n_clicks=0,
+                ),
+                dbc.Collapse(
+                    dmc.Card(dmc.CardSection(children), style={"background-color": card_color}),
+                    id=spoilerid,
+                    is_open=False,
+                    style={"background-color": card_color},
+                ),
+            ],
+            id=timelineid,
             style={"font-family": headline["font-family"], "font-weight": "normal"},
         )
 
@@ -878,7 +875,7 @@ class FrontEndLayout(DashBasePage):
             ),
             dbc.Row(
                 dmc.Card(
-                    self._first_ref(),
+                    self.ref_container(self._first_ref()[0], self._first_ref()[1]),
                     withBorder=False,
                     style={
                         # "margin-bottom": "20px",
@@ -892,7 +889,21 @@ class FrontEndLayout(DashBasePage):
             ),
             dbc.Row(
                 dmc.Card(
-                    self._second_ref(),
+                    self.ref_container(self._second_ref()[0], self._second_ref()[1]),
+                    withBorder=False,
+                    style={
+                        # "margin-bottom": "20px",
+                        # "margin-top": "20px",
+                        "background-color": card_color,
+                        # "width": "100%",
+                        # "height": "100%",
+                        "align-self": "center",
+                    },
+                )
+            ),
+            dbc.Row(
+                dmc.Card(
+                    self.ref_container(self._third_ref()[0], self._third_ref()[1]),
                     withBorder=False,
                     style={
                         # "margin-bottom": "20px",
@@ -906,7 +917,7 @@ class FrontEndLayout(DashBasePage):
             ),
         ]
 
-    def _first_ref(self):
+    def ref_container(self, text, cite):
         return dbc.Container(
             [
                 dmc.Blockquote(
@@ -914,11 +925,11 @@ class FrontEndLayout(DashBasePage):
                         showLabel="Show more",
                         hideLabel="Hide",
                         initialState=False,
-                        maxHeight=70,
-                        children="Mit Beatrice findet man eine Begleitung fürs Leben. Durch ihre ruhige Art gibt sie Sicherheit. Sie schafft es, dem Klienten in seinem Anliegen zu folgen und gleichzeitig zu führen. Sie kann sehr gut zuhören und begleitet die eigene Entwicklung professionell und sehr klar. Die Anwendung vielfältiger Methoden hilft auch aus komplexen Situationen einen Ausweg zu finden. Ihre offen und unkomplizierte Art macht es einem sehr leicht sich zu öffnen und auch schwierige Dinge auszusprechen.",
+                        maxHeight=63,
+                        children=text,
                         id="ref1",
                     ),
-                    cite="- Annika",
+                    cite=cite,
                 )
             ],
             fluid=True,
@@ -933,29 +944,23 @@ class FrontEndLayout(DashBasePage):
             },
         )
 
-    def _second_ref(self):
-        return dbc.Container(
-            [
-                dmc.Blockquote(
-                    dmc.Spoiler(
-                        showLabel="Show more",
-                        hideLabel="Hide",
-                        initialState=False,
-                        maxHeight=70,
-                        children="Beatrice hat mir geholfen, mit einem liebevollen und urteilsfreien Blick auf meine Herausforderungen zu sehen. Während ich vor den gemeinsamen Coaching-Sessions wahnsinnig harsch über mich selbst geurteilt und mich ständig mit anderen Menschen verglichen habe, lösten die Gespräche mit Beatrice einen Perspektivwechsel in mir aus. Ihre Art, meine existierende Sichtweisen zu hinterfragen und alternative Szenarien und Interpretationen in den Raum zu stellen, lässt mich sowohl mich selbst, als auch die Welt um mich herum, offener betrachten. Gemeinsam haben wir Konzepte erarbeitet, die mir helfen, mit Selbstzweifeln und Perfektionismus kurzfristig umzugehen und langfristig bestehende Muster zu durchrechen.",
-                        id="ref1",
-                    ),
-                    cite="- Laura",
-                )
-            ],
-            fluid=True,
-            style={
-                # "margin-bottom": "20px",
-                # "margin-top": "20px",
-                "background-color": "white",
-                # "border-radius": "2em",
-                # "width": "100%",
-                # "height": "100%",
-                "align-self": "center",
-            },
+    def _first_ref(self) -> Tuple[str, str]:
+        return (
+            "Mit Beatrice findet man eine Begleitung fürs Leben. Durch ihre ruhige Art gibt sie Sicherheit. Sie schafft es, dem Klienten in seinem Anliegen zu folgen und gleichzeitig zu führen. Sie kann sehr gut zuhören und begleitet die eigene Entwicklung professionell und sehr klar. Die Anwendung vielfältiger Methoden hilft auch aus komplexen Situationen einen Ausweg zu finden. Ihre offen und unkomplizierte Art macht es einem sehr leicht sich zu öffnen und auch schwierige Dinge auszusprechen.",
+            "- Annika",
+        )
+
+    def _second_ref(self) -> Tuple[str, str]:
+        return (
+            "Beatrice hat mir geholfen, mit einem liebevollen und urteilsfreien Blick auf meine Herausforderungen zu sehen. Während ich vor den gemeinsamen Coaching-Sessions wahnsinnig harsch über mich selbst geurteilt und mich ständig mit anderen Menschen verglichen habe, lösten die Gespräche mit Beatrice einen Perspektivwechsel in mir aus. Ihre Art, meine existierende Sichtweisen zu hinterfragen und alternative Szenarien und Interpretationen in den Raum zu stellen, lässt mich sowohl mich selbst, als auch die Welt um mich herum, offener betrachten. Gemeinsam haben wir Konzepte erarbeitet, die mir helfen, mit Selbstzweifeln und Perfektionismus kurzfristig umzugehen und langfristig bestehende Muster zu durchrechen.",
+            "- Laura",
+        )
+
+    def _third_ref(self) -> Tuple[str, str]:
+        return (
+            """Über den Zeitraum von mehr als einem Jahr hat mich Beatrice im Rahmen von systemischen Coaching Sessions begleitet.
+Mir war es im Rahmen der Sessions ein Anliegen, meine Kommunikation in professionellen Kontexten zu verbessern. Ihre Sessions waren dabei immer gut strukturiert und dennoch flexibel genug, um auf aktuelle Themen aus meinem Leben einzugehen. Durch gezielte Fragestellungen konnte ich mein Kommunikationsverhalten reflektieren, was sich direkt in meiner professionellen Kommunikation bemerkbar machte. Zudem legte mir Beatrice auch wertvolle Methoden nahe, die ich über unsere Sessions hinaus anwenden konnte.
+Ein weiterer Schwerpunkt unserer Arbeit lag auf generellen Karriereentscheidungen. Beatrice half mir, meine beruflichen Ziele klarer zu definieren und konkrete Schritte zu planen, um diese zu erreichen. Ihre Methoden sind praxisnah und lösungsorientiert, was mir half, Unsicherheiten abzubauen und selbstbewusster Entscheidungen zu treffen.
+Ich bin Beatrice ausgesprochen dankbar für die durchweg positive und bereichernde Erfahrung!""",
+            "- Manuel",
         )
