@@ -16,7 +16,7 @@ textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
 
 
-class PrivatePerson(FrontEndLayout):
+class Company(FrontEndLayout):
     def __init__(self, **kwargs):
         logger.debug("Start init Layout.__init__()")
         super().__init__()
@@ -93,8 +93,10 @@ class PrivatePerson(FrontEndLayout):
                             dmc.SimpleGrid(
                                 cols=1,
                                 children=self._layout_cardheader_second_row(
-                                    image="assets/privat.png",
-                                    text_content=self._header_list(text1=[""], text2=self._header_text_2()),
+                                    image="assets/board-4855932_1920.jpg",
+                                    text_content=self._header_list(
+                                        text1=["Als Führungskraft"], text2=self._header_text_2()
+                                    ),
                                 ),
                                 # mt="sm",
                                 breakpoints=[
@@ -133,6 +135,31 @@ class PrivatePerson(FrontEndLayout):
                     ),
                     dmc.CardSection(
                         self._layout_cardbody(),
+                        withBorder=True,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr=0,
+                        style={
+                            # "width": "100%",
+                            # "height": "100%",
+                            "align-self": "center",
+                            "justify-content": "center",
+                            "background-color": card_color,
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._divider(),
+                        withBorder=False,
+                        inheritPadding=True,
+                        # mt="sm",
+                        # mr="sm",
+                        style={
+                            "align": "center",
+                            "background-color": "white",
+                        },
+                    ),
+                    dmc.CardSection(
+                        self._layout_cardbody2(),
                         withBorder=True,
                         inheritPadding=True,
                         # mt="sm",
@@ -228,14 +255,24 @@ class PrivatePerson(FrontEndLayout):
 
     def _layout_cardbody(self):
         return [
+            self._layout_cardbody_zero_row(),
             self._layout_cardbody_first_row(),
             self._layout_cardbody_second_row(),
             self._layout_cardbody_third_row(),
-            self._layout_cardbody_fourth_row(),
         ]
 
+    def _layout_cardbody2(self):
+        return [
+            self._layout_cardbody_fourth_row(),
+            self._layout_cardbody_fifth_row(),
+            self._layout_cardbody_sixth_row(),
+        ]
+
+    def _layout_cardbody_zero_row(self):
+        return dbc.Row(dbc.Col(self._main_text_0(), width=7), justify="center")
+
     def _layout_cardbody_first_row(self):
-        return dbc.Row([self._main_text_1()])
+        return dbc.Row(self._main_text_1(), style={"justify-content": "center", "align-content": "center"})
 
     def _layout_cardbody_second_row(self):
         return dbc.Row([self._main_text_2()])
@@ -244,7 +281,13 @@ class PrivatePerson(FrontEndLayout):
         return dbc.Row([self._main_text_3()])
 
     def _layout_cardbody_fourth_row(self):
-        return dbc.Row([self._free_contact()])
+        return dbc.Row([self._main_text_4()])
+
+    def _layout_cardbody_fifth_row(self):
+        return dbc.Row([self._main_text_5()])
+
+    def _layout_cardbody_sixth_row(self):
+        return dbc.Row([self._main_text_6()])
 
     def _header_list(self, text1, text2):
         return dbc.Row(
@@ -305,54 +348,63 @@ class PrivatePerson(FrontEndLayout):
 
     def _header_text_2(self):
         return [
-            """\n* Sie möchten in ihrem Leben eine Veränderung erwirken, kommen aber nicht voran.""",
-            """\n* Sie sind ungewollt in ihrem Umfeld einer Veränderung ausgesetzt, die Sie bewältigen müssen.""",
-            """\n* Sie sind bereits aktiv in einer Veränderungsphase und möchten dabei begleitet werden.""",
+            """\n* Möchten Sie eine Veränderung erwirken und ihr Team dabei optimal einbinden.""",
+            """\n* Registrieren Sie einen gewissen Vorbehalt gegenüber einer anstehenden/ laufenden Veränderung.""",
+            """\n* Stehen Sie mit ihrem Team vor einer größeren strukturellen Veränderung.""",
+        ]
+
+    def _main_text_0(self):
+        return [
+            dcc.Markdown(
+                [
+                    """*„Eine Gruppe ist mehr als die Summe ihrer einzelnen Mitglieder.“*""",
+                ],
+                style={
+                    "font-family": textfont["font-family"],
+                    "margin-bottom": "0px",
+                    "margin-top": "20px",
+                    "background-color": card_color,
+                    "align-self": "center",
+                    "justify-content": "center",
+                },
+                className="markdown-responsive",
+            ),
         ]
 
     def _main_text_1(self):
-        return dbc.Container(
-            [
-                dcc.Markdown(
-                    [
-                        """Veränderungen begleiten unser gesamtes Leben. Es gibt von außen sichtbare Veränderungen, z.B. einen Umzug, einen Jobwechsel, oder das Zurückkommen ins Berufsleben nach einer Pause. Es gibt auch Veränderungen, die im Verborgenen stattfinden und unsere Haltung oder das Denken beeinflussen. Manchmal ist diese Veränderung von einem Erlebnis ausgelöst worden, auch wenn man es selbst nicht so richtig zuordnen kann. Und es gibt Veränderungen, die wir uns wünschen – z.B. im beruflichen Kontext mit Vorgesetzten und oder KollegInnen oder eine andere Work-Life Balance.""",
-                        """ \n \n Veränderungen können also:""",
-                    ],
-                    style={
-                        "font-family": textfont["font-family"],
-                        "margin-bottom": "-20px",
-                        "margin-top": "20px",
-                        "background-color": card_color,
-                        "align-self": "center",
-                    },
-                    className="markdown-responsive",
-                )
-            ],
-            fluid=True,
-            style={
-                # "margin-bottom": "20px",
-                # "margin-top": "20px",
-                "background-color": card_color,
-                # "width": "100%",
-                # "height": "100%",
-                "align-self": "center",
-            },
-        )
+        return [
+            dcc.Markdown(
+                [
+                    """ \n \n Dieser Satz fällt häufig. Es wir jedoch kaum darüber gesprochen, dass es auch das Gegenteil gibt: eine Gruppe kann weniger sein als die Summe ihrer einzelnen Mitglieder.""",
+                    """ \n Zum Beispiel dann, wenn Rollen nicht klar definiert sind, nicht alle das gleiche Ziel verfolgen oder Konflikte zwischen einzelnen Mitgliedern bestehen. Da Teams, Abteilungen und Unternehmen einer ständigen Veränderung (personell, sich ändernde Anforderungen oder Rahmenbedingungen) unterworfen sind, kann dies sogar schnell passieren.""",
+                ],
+                style={
+                    "font-family": textfont["font-family"],
+                    "margin-bottom": "0px",
+                    "margin-top": "20px",
+                    "background-color": card_color,
+                    "align-self": "center",
+                    "justify-content": "center",
+                },
+                className="markdown-responsive",
+            ),
+        ]
 
     def _main_text_2(self):
         return dbc.Container(
             [
                 dcc.Markdown(
                     [
-                        """ \n* „von innen“ motiviert – aber schwierig in der Umsetzung sein""",
-                        """ \n* im eigenen Denken und Handeln passieren – und man weiß selbst gar nicht genau, wie es dazu kam""",
-                        """ \n* uns ungewollt „passieren“ """,
-                        """ \n* uns gewollt „passieren“ – und trotzdem herausfordernd sein""",
+                        """ \n \n Nun ist Kommunikation gefragt. Diese wird bei einem Team Coaching in einem geschützten Raum gestaltet. Dabei wird ganz individuell auf die Bedürfnisse der Gruppe eingegangen.""",
+                        """ \n \n Im organisatorischen Kontext betrachtet man drei Ebenen:""",
+                        """ \n* Jedes einzelne Gruppenmitglied hat menschliche Bedürfnisse wie Weiterentwicklung, Sicherheit oder Anerkennung.""",
+                        """ \n* Es gibt jedoch auch Anforderungen, die die Rolle in der Organisation mit sich bringt (fachlich wie disziplinarisch) und zudem  """,
+                        """ \n* hat die Organisation Erwartungen an jeden ihrer Mitarbeiter*innen. """,
                     ],
                     style={
                         "font-family": textfont["font-family"],
                         "margin-bottom": "0px",
-                        "margin-top": "10px",
+                        "margin-top": "20px",
                         "background-color": card_color,
                         "align-self": "center",
                         "line-height": "1.1",
@@ -376,15 +428,105 @@ class PrivatePerson(FrontEndLayout):
             [
                 dcc.Markdown(
                     [
-                        """ \n \n Egal welche Veränderung bei Ihnen passiert ist oder ansteht: ein systemisches Coaching hilft, die Veränderung zu verstehen, anzuerkennen und aktiv zu gestalten.""",
-                        """ \n \n In den Coaching-Sessions schauen wir uns gemeinsam Ihre Situation an und analysieren, was genau Sie herausfordert. Ob, und wenn ja, welche Ängste oder Glaubenssätze zu Grunde liegen, die es Ihnen schwer machen, die Veränderung anzunehmen oder anzugehen. Im nächsten Schritt erörtern wir Handlungsoptionen, die Sie ohne Coaching vielleicht nicht gesehen hätten. Und Sie entscheiden schlussendlich, welchen Weg Sie gehen wollen.""",
+                        """ \n \n Alle drei Ebenen sind im Team-Coaching wichtig und spielen bei der Ausgestaltung des Konzepts eine Rolle.""",
+                    ],
+                    style={
+                        "font-family": textfont["font-family"],
+                        "margin-bottom": "0px",
+                        "margin-top": "20px",
+                        "background-color": card_color,
+                        "align-self": "center",
+                    },
+                    className="markdown-responsive",
+                )
+            ],
+            fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": card_color,
+                # "width": "100%",
+                # "height": "100%",
+                "align-self": "center",
+            },
+        )
+
+    def _main_text_4(self):
+        return dbc.Container(
+            [
+                dcc.Markdown(
+                    [
+                        """ \n \n Beispiele, wann ein Team-Coaching sinnvoll sein kann:""",
+                    ],
+                    style={
+                        "font-family": textfont["font-family"],
+                        "margin-bottom": "-20px",
+                        "margin-top": "20px",
+                        "background-color": card_color,
+                        "align-self": "center",
+                    },
+                    className="markdown-responsive",
+                )
+            ],
+            fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": card_color,
+                # "width": "100%",
+                # "height": "100%",
+                "align-self": "center",
+            },
+        )
+
+    def _main_text_5(self):
+        return dbc.Container(
+            [
+                dcc.Markdown(
+                    [
+                        """ \n* Hohe Fluktuation im Team, was z.B. zu ungeklärten Verantwortungen führt.""",
+                        """ \n* Neue Führungskraft, vielleicht sogar aus dem Team kommend.""",
+                        """ \n* Es liegt fachlich eine größere Veränderung vor und das Team hat Angst, das bestehende loszulassen.""",
+                        """ \n* Andere Veränderungen am Arbeitsplatz, die zu einem Kontrollverlustgefühl bei den Teammitgliedern führt.""",
                     ],
                     style={
                         "font-family": textfont["font-family"],
                         "margin-bottom": "20px",
+                        "margin-top": "10px",
+                        "background-color": card_color,
+                        "align-self": "center",
+                        "line-height": "1.1",
+                    },
+                    className="markdown-responsive",
+                )
+            ],
+            fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                # "margin-top": "20px",
+                "background-color": card_color,
+                # "width": "100%",
+                # "height": "100%",
+                "align-self": "center",
+            },
+        )
+
+    def _main_text_6(self):
+        return dbc.Container(
+            [
+                dcc.Markdown(
+                    [
+                        """Gemeinsam mit dem Auftragsgeber wird im Vorfeld die Situation ausführlich besprochen.""",
+                        """Basierend auf diesem Gespräch erstelle ich ein Konzept, welches vor der Umsetzung besprochen wird.""",
+                        """\n In der Umsetzungsphase wird situativ reagiert und das Konzept an die Bedürfnisse und das Verhalten der gesamten Gruppe angepasst.""",
+                    ],
+                    style={
+                        "font-family": textfont["font-family"],
+                        "margin-bottom": "0px",
                         "margin-top": "20px",
                         "background-color": card_color,
                         "align-self": "center",
+                        "line-height": "1.1",
                     },
                     className="markdown-responsive",
                 )
@@ -429,7 +571,7 @@ class PrivatePerson(FrontEndLayout):
                 },
             ),
             dmc.Image(
-                src=self.path + "assets/privat2.png",
+                src=self.path + "assets/dart-102881_1920.jpg",
                 # className="d-flex justify-content-end",
                 style={
                     "width": "100%",
@@ -445,16 +587,70 @@ class PrivatePerson(FrontEndLayout):
 
     def _third_card_text(self):
         return dbc.Container(
+            [self._third_card_text_1(), self._third_card_text_2(), self._third_card_text_3()],
+            fluid=True,
+            style={
+                # "margin-bottom": "20px",
+                "margin-top": "-20px",
+                "background-color": card_color,
+                # "width": "100%",
+                # "height": "100%",
+                "align-self": "center",
+            },
+        )
+
+    def _third_card_text_1(self):
+        return dbc.Row(
+            self.markdown_text("## Ziel des Team-Coachings", weight="bold"),
+        )
+
+    def _third_card_text_2(self):
+        return dbc.Row(
+            dcc.Markdown(
+                [
+                    """Unabhängig vom Anlass, gibt es generelle Ziele beim Team-Coaching, u.a.:""",
+                ],
+                style={
+                    "font-family": textfont["font-family"],
+                    "margin-bottom": "-20px",
+                    "margin-top": "0px",
+                    "background-color": card_color,
+                    "align-self": "center",
+                },
+                className="markdown-responsive",
+            )
+        )
+
+    def _third_card_text_3(self):
+        return dbc.Row(
+            dcc.Markdown(
+                [
+                    """ \n* Steigerung der Team-effizienz und -effektivität""",
+                    """ \n* Identifikation und Entwicklung von Team-Stärken (damit die Gruppe wieder mehr ist als Summe der Einzelteile)""",
+                    """ \n* Raum für Reflexion und neue Impulse schaffen""",
+                    """ \n* Jedem Teammitglied das Gefühl geben, eine Veränderung selbst gestalten zu können""",
+                ],
+                style={
+                    "font-family": textfont["font-family"],
+                    "margin-bottom": "0px",
+                    "margin-top": "10px",
+                    "background-color": card_color,
+                    "align-self": "center",
+                },
+                className="markdown-responsive",
+            )
+        )
+
+    def markdown_text(self, text, weight="normal"):
+        return dbc.Container(
             [
                 dcc.Markdown(
-                    [
-                        """Mit Privatpersonen sind nicht ausschließlich „private Themen“ gemeint. Es können selbstverständlich ebenso Fragestellungen aus dem beruflichen Kontext eingebracht werden.""",
-                        """ \n „Privatpersonen“ dient hier lediglich zur Abgrenzung gegenüber Führungskräften und UnternehmerInnen.""",
-                    ],
+                    text,
                     style={
                         "font-family": textfont["font-family"],
-                        "margin-bottom": "20px",
-                        "margin-top": "20px",
+                        "font-weight": weight,
+                        # "margin-bottom": "20px",
+                        # "margin-top": "20px",
                         "background-color": card_color,
                         "align-self": "center",
                     },
@@ -463,8 +659,8 @@ class PrivatePerson(FrontEndLayout):
             ],
             fluid=True,
             style={
-                # "margin-bottom": "20px",
-                # "margin-top": "20px",
+                "margin-bottom": "10px",
+                "margin-top": "0px",
                 "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",

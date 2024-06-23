@@ -1,6 +1,6 @@
 import logging
 import dash
-from src.apps import home, aboutme, individual, company, contact, impressum
+from src.apps import home, aboutme, individual, company, contact, impressum, company
 from dash import dcc, ctx
 from dash import html
 from dash.dependencies import Input, Output, State
@@ -11,6 +11,7 @@ from src.apps.utils.dash_base_template import DashBasePage
 import logging.config
 from src.app import app, server
 import smtplib
+import ssl
 from email.mime.text import MIMEText
 import os
 
@@ -280,7 +281,7 @@ class Navigation(DashBasePage):
         if "submit" in changed_id:
             # Configuration
             port = 465
-            sender_email = "web454@ebeas-coaching.de"
+            sender_email = "web454@beas-coaching.de"
             receiver_email = "beatrice_koch@gmx.de"
 
             # Plain text content
@@ -293,11 +294,14 @@ class Navigation(DashBasePage):
             # Send the email
             try:
                 with smtplib.SMTP_SSL(SMTP_SERVER, port) as server:
+                    server.connect(SMTP_SERVER, port)
                     server.login(SMTP_LOGIN, SMTP_PW)
                     server.sendmail(sender_email, receiver_email, message.as_string())
+                    server.quit()
 
                 return not hide_successful, hide_error, True
-            except:
+            except Exception as e:
+                print(e)
                 return hide_successful, not hide_error, disabled
         elif (email is not None) and ("@" in email) and (text is not None):
             return hide_successful, hide_error, False

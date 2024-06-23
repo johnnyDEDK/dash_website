@@ -240,11 +240,16 @@ class FrontEndLayout(DashBasePage):
                 style={
                     "width": "100%",
                     "maxWidth": "800px",
-                    "height": "100%",
+                    "height": "auto",
+                    # "maxHeight": "300px",
                     "align-self": "center",
                     "background-color": card_color,
                     "justify-content": "center",
-                    "@media screen and (min-width: 768px)": {"maxWidth": "500px", "height": "auto"},
+                    "@media screen and (min-width: 768px)": {
+                        "maxWidth": "500px",
+                        "height": "auto",
+                        "maxHeight": "500px",
+                    },
                 },
             ),
             dmc.Card(
@@ -435,85 +440,6 @@ class FrontEndLayout(DashBasePage):
             },
         )
 
-    def _carousel(self):
-        return dbc.Carousel(
-            items=[
-                {
-                    "key": "1",
-                    "src": self.path + "assets/Website_Schritte-Coaching_01.png",
-                },
-                {"key": "2", "src": self.path + "assets/Website_Schritte-Coaching_02.png"},
-                {"key": "3", "src": self.path + "assets/Website_Schritte-Coaching_03.png"},
-            ],
-            controls=True,
-            indicators=True,
-        )
-
-    def _accordion(self):
-        return dmc.Accordion(
-            disableChevronRotation=True,
-            # variant="contained",
-            className="g0",
-            children=[
-                dmc.AccordionItem(
-                    [
-                        dmc.AccordionControl(
-                            "01 - Unverbindliches Kennenlerngespräch",
-                            icon=DashIconify(
-                                icon="icon-park-solid:info",
-                                # color=dmc.theme.DEFAULT_COLORS["blue"][6],
-                                width=25,
-                            ),
-                            style={"font-family": headline["font-family"]},
-                        ),
-                        dmc.AccordionPanel(
-                            self._accordion_grid(
-                                self.accordion_image1(), self.accordion_content(self._accordion_item1_text())
-                            )
-                        ),
-                    ],
-                    value="info1",
-                ),
-                dmc.AccordionItem(
-                    [
-                        dmc.AccordionControl(
-                            "02 - Sitzungen",
-                            icon=DashIconify(
-                                icon="icon-park-solid:info",
-                                # color=dmc.theme.DEFAULT_COLORS["blue"][6],
-                                width=25,
-                            ),
-                        ),
-                        dmc.AccordionPanel(
-                            self._accordion_grid(
-                                self.accordion_image2(), self.accordion_content(self._accordion_item2_text())
-                            )
-                        ),
-                    ],
-                    value="info2",
-                ),
-                dmc.AccordionItem(
-                    [
-                        dmc.AccordionControl(
-                            "03 - Optionales Abschlussgespräch",
-                            icon=DashIconify(
-                                icon="icon-park-solid:info",
-                                # color=dmc.theme.DEFAULT_COLORS["blue"][6],
-                                width=25,
-                            ),
-                        ),
-                        dmc.AccordionPanel(
-                            self._accordion_grid(
-                                self.accordion_image3(), self.accordion_content(self._accordion_item3_text())
-                            )
-                        ),
-                    ],
-                    value="info3",
-                ),
-            ],
-            style={"width": "100%"},
-        )
-
     def _divider(self):
         return [
             dbc.Row(
@@ -617,6 +543,7 @@ class FrontEndLayout(DashBasePage):
                     style={
                         "align": "center",
                         "margin-bottom": "20px",
+                        "margin-top": "40px",
                         "background-color": card_color,
                     },
                     inheritPadding=True,
@@ -630,7 +557,7 @@ class FrontEndLayout(DashBasePage):
         )
 
     def _accordion_header(self):
-        return """### Ablauf eines Coachings"""
+        return """## Ablauf eines Coachings"""
         # return dbc.Row(
         #     dbc.Col(
         #         dcc.Markdown(
@@ -695,7 +622,7 @@ class FrontEndLayout(DashBasePage):
 
     def _accordion_item3_text(self):
         return [
-            """Eine Abschlusssitzung ist bei längeren Veränderungsphasen hilfreich. Wir reflektieren Ihre Entwicklungs-schritte und gehen die Erkenntnisse der Sitzungen gemeinsam durch.""",
+            """Eine Abschlusssitzung ist bei längeren Veränderungsphasen hilfreich. Wir reflektieren Ihre Entwicklungsschritte und gehen die Erkenntnisse der Sitzungen gemeinsam durch.""",
         ]
 
     def _accordion_grid(self, image, content):
@@ -865,7 +792,7 @@ class FrontEndLayout(DashBasePage):
     def references(self):
         return [
             dbc.Row(
-                self.markdown_text("""### Referenzen""", weight="bold"),
+                self.markdown_text("""## Referenzen""", weight="bold"),
                 style={
                     "align": "center",
                     "background-color": card_color,
