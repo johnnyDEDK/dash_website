@@ -13,7 +13,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-card_color = "#EDEBE7"
+card_color = "#edf1fa"  # "#dde1ed"  # "rgba(75, 99, 173, .34)"  # "#4b63ad"  # "#EDEBE7"  # "#d2d2d4"  #
 accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
 textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
@@ -54,7 +54,7 @@ class FrontEndLayout(DashBasePage):
                                     xxl={"size": 7},  # , "offset": 1},
                                     style={
                                         "align-self": "center",
-                                        "background-color": card_color,
+                                        "background-color": "white",
                                         "justify-content": "center",
                                     },
                                     align="center",
@@ -97,7 +97,8 @@ class FrontEndLayout(DashBasePage):
                             dmc.SimpleGrid(
                                 cols=1,
                                 children=self._layout_cardheader_second_row(
-                                    "assets/IMG_0569.jpg", self._header_list(self.header_text_1(), self.header_text_2())
+                                    "assets/IMG_0375_quadratisch.JPG",
+                                    self._header_list(self.header_text_1(), self.header_text_2()),
                                 ),
                                 # mt="sm",
                                 breakpoints=[
@@ -301,8 +302,8 @@ class FrontEndLayout(DashBasePage):
 
     def header_text_2(self):
         return [
-            """\n* stehen Privat oder im Beruf vor einer Veränderung.""",
-            """\n* sind Führungskraft oder Unternehmer und mit ihrem Team im Veränderungsprozess.\n""",
+            """\n* stehen privat oder im Beruf vor einer Veränderung.""",
+            """\n* sind Führungskraft oder UnternehmerIn und mit Ihrem Team im Veränderungsprozess.\n""",
             """* möchten eine Veränderung in Ihrem Leben erwirken.""",
         ]
 
@@ -326,6 +327,7 @@ class FrontEndLayout(DashBasePage):
                                 "line-height": "1.1",
                                 # "display": "flex",
                                 "justify-content": "center",
+                                "background-color": card_color,
                             },
                             className="markdown-responsive align-content-center justify-content-center",
                         ),
@@ -348,12 +350,17 @@ class FrontEndLayout(DashBasePage):
                                 "line-height": "1.1",
                                 # "display": "flex",
                                 "justify-content": "center",
+                                "background-color": card_color,
                             },
                             className="markdown-responsive align-content-center justify-content-center",
                         ),
                         justify="center",
                         className="align-content-center justify-content-center",
-                        style={"margin-top": "20px", "margin-left": "-25px"},
+                        style={
+                            "margin-top": "20px",
+                            "margin-left": "-25px",
+                            "background-color": card_color,
+                        },
                     ),
                 ],
                 align="center",
@@ -420,6 +427,7 @@ class FrontEndLayout(DashBasePage):
                     text,
                     style={
                         "font-family": textfont["font-family"],
+                        "line-height": "1.1",
                         "font-weight": weight,
                         # "margin-bottom": "20px",
                         # "margin-top": "20px",
@@ -589,6 +597,7 @@ class FrontEndLayout(DashBasePage):
                 text,
                 style={
                     "font-family": textfont["font-family"],
+                    "line-height": "1.1",
                     # "margin-bottom": "20px",
                     # "margin-top": "20px",
                     "background-color": accordion_color,
@@ -617,7 +626,7 @@ class FrontEndLayout(DashBasePage):
 
     def _accordion_item2_text(self):
         return [
-            """Jedes Anliegen ist so individuell wie ihr*e Träger\*in. Daher biete ich keine vordefinierten Pakete an. Eine Sitzung dauert 50 oder 90min. Die Frequenz variiert je nach Anliegen. """,
+            """Jedes Anliegen ist so individuell wie ihrE TrägerIn. Daher biete ich keine vordefinierten Pakete an. Eine Sitzung dauert 50 oder 90min. Die Frequenz variiert je nach Anliegen. """,
         ]
 
     def _accordion_item3_text(self):

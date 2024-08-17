@@ -10,7 +10,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-card_color = "#EDEBE7"
+card_color = "#edf1fa"  # "#EDEBE7"
 accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
 textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
@@ -93,7 +93,7 @@ class AboutMe(FrontEndLayout):
                             dmc.SimpleGrid(
                                 cols=1,
                                 children=self._layout_cardheader_second_row(
-                                    image="assets/aboutme.png",
+                                    image="assets/IMG_0569.jpg",
                                     text_content=self._header_list(text1=[""], text2=self.header_text_2()),
                                 ),
                                 # mt="sm",
@@ -211,17 +211,18 @@ class AboutMe(FrontEndLayout):
                 dcc.Markdown(
                     [
                         """Über mich:""",
-                        """ \n* Geboren und aufgewachsen in Freiburg im Breisgau""",
-                        """ \n* Studium der (internationalen) Betriebswirtschaftslehre in Nürnberg, Kolumbien und Passau""",
+                        """ \n* Geboren und aufgewachsen in Freiburg im Breisgau.""",
+                        """ \n* Studium der (internationalen) Betriebswirtschaftslehre in Nürnberg, Kolumbien und Passau.""",
                         """ \n* Aufnahme in einem Nachwuchsförderprogramm eines DAX-Konzerns in 2016. Seitdem habe ich mich in den Bereichen Digitales Produktmanagement und Kommunikation spezialisiert. In den vergangenen Jahren habe ich häufig international gearbeitet (China, USA, Südafrika) und Führungs- und Projektverantwortung übernommen.""",
-                        """ \n* Bereits während meines Studiums habe ich mich viel mit dem Thema verantwortungsvolles Führen beschäftigt, z.B. im Rahmen des Stipendiums der Bayerischen EliteAkademie und Teilnahme der Sommerakademie Führung und Persönlichkeit""",
+                        """ \n* Bereits während meines Studiums habe ich mich viel mit dem Thema verantwortungsvolles Führen beschäftigt, z.B. im Rahmen des Stipendiums der Bayerischen EliteAkademie und Teilnahme der Sommerakademie Führung und Persönlichkeit.""",
                         """ \n* 2023 Beginn der Systemischen Coaching Ausbildung bei artop, Institut an der Humboldt-Universität zu Berlin, Abschluss April 2024.""",
                         """ \n _Die Ausbildung ist von Deutschlands führendem Coaching-Verband DBVC anerkannt und existiert seit 2001. Zudem besitzt **artop** den Status Educational Provider for Business Coaching des IOBC, einer in Deutschland registrierten internationalen Organisation für professionelles Coaching mit dem Fokus auf Business Coaching und Leadership._""",
-                        """ \n* Hobbies: Menschen weiterentwickeln, Wandern, Gleitschirmfliegen, Kochen, Backen, Lesen""",
+                        """ \n* Hobbies: Wandern, Gleitschirmfliegen, Kochen, Backen, Lesen""",
                         """ \n \n Ich freue mich über ein unverbindliches Kennenlerngespräch mit Ihnen! \n \n""",
                     ],
                     style={
                         "font-family": textfont["font-family"],
+                        "line-height": "1.1",
                         "margin-bottom": "20px",
                         "margin-top": "20px",
                         "background-color": card_color,

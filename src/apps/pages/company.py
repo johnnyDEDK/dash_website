@@ -10,7 +10,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-card_color = "#EDEBE7"
+card_color = "#edf1fa"  # "#EDEBE7"
 accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
 textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
@@ -366,6 +366,7 @@ class Company(FrontEndLayout):
                     "background-color": card_color,
                     "align-self": "center",
                     "justify-content": "center",
+                    "line-height": "1.1",
                 },
                 className="markdown-responsive",
             ),
@@ -385,6 +386,7 @@ class Company(FrontEndLayout):
                     "background-color": card_color,
                     "align-self": "center",
                     "justify-content": "center",
+                    "line-height": "1.1",
                 },
                 className="markdown-responsive",
             ),
@@ -399,7 +401,7 @@ class Company(FrontEndLayout):
                         """ \n \n Im organisatorischen Kontext betrachtet man drei Ebenen:""",
                         """ \n* Jedes einzelne Gruppenmitglied hat menschliche Bedürfnisse wie Weiterentwicklung, Sicherheit oder Anerkennung.""",
                         """ \n* Es gibt jedoch auch Anforderungen, die die Rolle in der Organisation mit sich bringt (fachlich wie disziplinarisch) und zudem  """,
-                        """ \n* hat die Organisation Erwartungen an jeden ihrer Mitarbeiter*innen. """,
+                        """ \n* hat die Organisation Erwartungen an jedeN ihreR MitarbeiterInnen. """,
                     ],
                     style={
                         "font-family": textfont["font-family"],
@@ -436,6 +438,7 @@ class Company(FrontEndLayout):
                         "margin-top": "20px",
                         "background-color": card_color,
                         "align-self": "center",
+                        "line-height": "1.1",
                     },
                     className="markdown-responsive",
                 )
@@ -454,24 +457,14 @@ class Company(FrontEndLayout):
     def _main_text_4(self):
         return dbc.Container(
             [
-                dcc.Markdown(
-                    [
-                        """ \n \n Beispiele, wann ein Team-Coaching sinnvoll sein kann:""",
-                    ],
-                    style={
-                        "font-family": textfont["font-family"],
-                        "margin-bottom": "-20px",
-                        "margin-top": "20px",
-                        "background-color": card_color,
-                        "align-self": "center",
-                    },
-                    className="markdown-responsive",
+                dbc.Row(
+                    self.markdown_text("## Beispiele, wann ein Team-Coaching sinnvoll sein kann", weight="bold"),
                 )
             ],
             fluid=True,
             style={
                 # "margin-bottom": "20px",
-                # "margin-top": "20px",
+                "margin-top": "20px",
                 "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",
@@ -552,26 +545,26 @@ class Company(FrontEndLayout):
                         className="d-flex justify-content-center align-content-center",
                         style={"align": "center", "background-color": card_color, "margin-top": "20px"},
                     ),
-                    dmc.CardSection(
-                        self._free_contact(),
-                        # py="xl",
-                        style={
-                            "align": "center",
-                            "background-color": card_color,
-                        },
-                        inheritPadding=True,
-                    ),
+                    # dmc.CardSection(
+                    #     self._free_contact(),
+                    #     # py="xl",
+                    #     style={
+                    #         "align": "center",
+                    #         "background-color": card_color,
+                    #     },
+                    #     inheritPadding=True,
+                    # ),
                 ],
                 style={
                     # "width": "100%",
                     # "height": "100%",
-                    "align-self": "center",
+                    "align-self": "top",
                     "background-color": card_color,
                     "justify-content": "center",
                 },
             ),
             dmc.Image(
-                src=self.path + "assets/dart-102881_1920.jpg",
+                src=self.path + "assets/darts-102919_1920_quadrat.jpg",
                 # className="d-flex justify-content-end",
                 style={
                     "width": "100%",
@@ -595,13 +588,13 @@ class Company(FrontEndLayout):
                 "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",
-                "align-self": "center",
+                "align-self": "top",
             },
         )
 
     def _third_card_text_1(self):
         return dbc.Row(
-            self.markdown_text("## Ziel des Team-Coachings", weight="bold"),
+            self.markdown_text("## Ziele des Team-Coachings", weight="bold"),
         )
 
     def _third_card_text_2(self):
@@ -635,7 +628,7 @@ class Company(FrontEndLayout):
                     "margin-bottom": "0px",
                     "margin-top": "10px",
                     "background-color": card_color,
-                    "align-self": "center",
+                    "align-self": "top",
                 },
                 className="markdown-responsive",
             )
@@ -652,7 +645,8 @@ class Company(FrontEndLayout):
                         # "margin-bottom": "20px",
                         # "margin-top": "20px",
                         "background-color": card_color,
-                        "align-self": "center",
+                        "align-self": "top",
+                        "line-height": "1.1",
                     },
                     className="markdown-responsive",
                 )
@@ -664,6 +658,6 @@ class Company(FrontEndLayout):
                 "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",
-                "align-self": "center",
+                "align-self": "top",
             },
         )

@@ -98,7 +98,7 @@ class Navigation(DashBasePage):
                                     align="center",
                                     weight=0,
                                     style={
-                                        "background": "#A1AAA5",
+                                        "background": "#25274D",  # "#A1AAA5",
                                         "font-family": headline["font-family"],
                                         "font-weight": "normal",
                                     },
@@ -188,7 +188,7 @@ class Navigation(DashBasePage):
             ),
             dbc.NavItem(
                 dbc.NavLink(
-                    "Führungskraft/Unternehmer",
+                    "Führungskraft/UnternehmerIn",
                     href="/company",
                     style=headline,
                 )

@@ -10,7 +10,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-card_color = "#EDEBE7"
+card_color = "#edf1fa"  # "#EDEBE7"
 accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
 textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
@@ -167,7 +167,7 @@ class PrivatePerson(FrontEndLayout):
                                     {"minWidth": 600, "maxWidth": 1000, "cols": 1},
                                 ],
                                 style={
-                                    "align-self": "center",
+                                    "align-self": "top",
                                     "justify-content": "end",
                                     "background-color": card_color,
                                 },
@@ -180,7 +180,7 @@ class PrivatePerson(FrontEndLayout):
                         style={
                             # "width": "100%",
                             # "height": "100%",
-                            "align-self": "center",
+                            "align-self": "top",
                             "justify-content": "end",
                             "background-color": card_color,
                         },
@@ -320,6 +320,7 @@ class PrivatePerson(FrontEndLayout):
                     ],
                     style={
                         "font-family": textfont["font-family"],
+                        "line-height": "1.1",
                         "margin-bottom": "-20px",
                         "margin-top": "20px",
                         "background-color": card_color,
@@ -351,6 +352,7 @@ class PrivatePerson(FrontEndLayout):
                     ],
                     style={
                         "font-family": textfont["font-family"],
+                        "line-height": "1.1",
                         "margin-bottom": "0px",
                         "margin-top": "10px",
                         "background-color": card_color,
@@ -381,6 +383,7 @@ class PrivatePerson(FrontEndLayout):
                     ],
                     style={
                         "font-family": textfont["font-family"],
+                        "line-height": "1.1",
                         "margin-bottom": "20px",
                         "margin-top": "20px",
                         "background-color": card_color,
@@ -407,8 +410,13 @@ class PrivatePerson(FrontEndLayout):
                     dmc.CardSection(
                         self._third_card_text(),
                         inheritPadding=True,
-                        className="d-flex justify-content-center align-content-center",
-                        style={"align": "center", "background-color": card_color, "margin-top": "20px"},
+                        className="d-flex justify-content-center align-content-top",
+                        style={
+                            "align": "center",
+                            "background-color": card_color,
+                            "margin-top": "20px",
+                            "align-self": "top",
+                        },
                     ),
                     dmc.CardSection(
                         self._free_contact(),
@@ -423,7 +431,7 @@ class PrivatePerson(FrontEndLayout):
                 style={
                     # "width": "100%",
                     # "height": "100%",
-                    "align-self": "center",
+                    "align-self": "top",
                     "background-color": card_color,
                     "justify-content": "center",
                 },
@@ -453,10 +461,11 @@ class PrivatePerson(FrontEndLayout):
                     ],
                     style={
                         "font-family": textfont["font-family"],
+                        "line-height": "1.1",
                         "margin-bottom": "20px",
                         "margin-top": "20px",
                         "background-color": card_color,
-                        "align-self": "center",
+                        "align-self": "top",
                     },
                     className="markdown-responsive",
                 )
@@ -468,6 +477,6 @@ class PrivatePerson(FrontEndLayout):
                 "background-color": card_color,
                 # "width": "100%",
                 # "height": "100%",
-                "align-self": "center",
+                "align-self": "top",
             },
         )

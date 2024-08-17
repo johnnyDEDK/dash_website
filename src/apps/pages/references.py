@@ -10,7 +10,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-card_color = "#EDEBE7"
+card_color = "#edf1fa"  # "#EDEBE7"
 accordion_color = card_color  # "-#D6DCE5"  # "#F8F9FA"
 textfont = {"font-family": "Karla", "color": "black"}
 headline = {"font-family": "Karla", "color": "black"}
