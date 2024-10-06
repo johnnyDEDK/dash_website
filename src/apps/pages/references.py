@@ -47,8 +47,8 @@ class References(DashBasePage):
                                     md={"size": 10},
                                     sm={"size": 10},
                                     lg={"size": 10},
-                                    xl={"size": 10},  # , "offset": 1},
-                                    xxl={"size": 7},  # , "offset": 1},
+                                    xl={"size": 8},  # , "offset": 1},
+                                    xxl={"size": 6},  # , "offset": 1},
                                     style={
                                         "align-self": "center",
                                         "background-color": card_color,
