@@ -1,0 +1,85 @@
+<svg viewBox="0 0 120 55" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gold gradient for left ring - warm gold -->
+    <linearGradient id="goldL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8d4a0" />
+      <stop offset="20%" stop-color="#d4b878" />
+      <stop offset="50%" stop-color="#c8a050" />
+      <stop offset="80%" stop-color="#b89040" />
+      <stop offset="100%" stop-color="#a07830" />
+    </linearGradient>
+
+    <!-- Gold gradient for right ring -->
+    <linearGradient id="goldR" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0e0b0" />
+      <stop offset="20%" stop-color="#dcc888" />
+      <stop offset="50%" stop-color="#d0b060" />
+      <stop offset="80%" stop-color="#c0a048" />
+      <stop offset="100%" stop-color="#a88838" />
+    </linearGradient>
+
+    <!-- Highlight gradient -->
+    <linearGradient id="highlightL" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#fffef0" stop-opacity="0.7" />
+      <stop offset="30%" stop-color="#fff8d0" stop-opacity="0.3" />
+      <stop offset="70%" stop-color="#d0a040" stop-opacity="0" />
+      <stop offset="100%" stop-color="#c09030" stop-opacity="0.2" />
+    </linearGradient>
+
+    <linearGradient id="highlightR" x1="70%" y1="0%" x2="30%" y2="100%">
+      <stop offset="0%" stop-color="#fffef0" stop-opacity="0.7" />
+      <stop offset="30%" stop-color="#fff8d0" stop-opacity="0.3" />
+      <stop offset="70%" stop-color="#d0a040" stop-opacity="0" />
+      <stop offset="100%" stop-color="#c09030" stop-opacity="0.2" />
+    </linearGradient>
+
+    <!-- Shadow for 3D effect -->
+    <linearGradient id="shadow" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#806020" stop-opacity="0.5" />
+      <stop offset="50%" stop-color="#906830" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#a08040" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Masks for interlocking -->
+    <mask id="leftBehind">
+      <rect x="0" y="0" width="120" height="55" fill="white" />
+      <!-- Cut out where right ring front passes over -->
+      <ellipse cx="75" cy="27" rx="20" ry="20" fill="black" />
+      <!-- But keep the part where left ring passes in front (top) -->
+      <path d="M 55 27 A 20 20 0 0 1 55 7 L 55 27 Z" fill="white" />
+    </mask>
+
+    <mask id="leftFront">
+      <rect x="0" y="0" width="120" height="55" fill="black" />
+      <!-- Only show where left ring passes in front of right (bottom overlap) -->
+      <path d="M 45 27 L 65 27 L 65 50 L 45 50 Z" fill="white" />
+    </mask>
+  </defs>
+
+  <!-- Shadow under rings -->
+  <ellipse cx="60" cy="50" rx="35" ry="4" fill="#a09080" opacity="0.2" />
+
+  <!-- LEFT RING - back portion (behind right ring) -->
+  <g mask="url(#leftBehind)">
+    <circle cx="45" cy="27" r="17" fill="none" stroke="url(#goldL)" stroke-width="7" />
+    <circle cx="45" cy="27" r="17" fill="none" stroke="url(#highlightL)" stroke-width="4" />
+    <circle cx="45" cy="27" r="14" fill="none" stroke="url(#shadow)" stroke-width="1.5" opacity="0.5" />
+  </g>
+
+  <!-- RIGHT RING - complete ring (in middle layer) -->
+  <circle cx="75" cy="27" r="17" fill="none" stroke="url(#goldR)" stroke-width="7" />
+  <circle cx="75" cy="27" r="17" fill="none" stroke="url(#highlightR)" stroke-width="4" />
+  <circle cx="75" cy="27" r="14" fill="none" stroke="url(#shadow)" stroke-width="1.5" opacity="0.5" />
+
+  <!-- LEFT RING - front portion (passes in front of right ring at bottom) -->
+  <g mask="url(#leftFront)">
+    <circle cx="45" cy="27" r="17" fill="none" stroke="url(#goldL)" stroke-width="7" />
+    <circle cx="45" cy="27" r="17" fill="none" stroke="url(#highlightL)" stroke-width="4" />
+  </g>
+
+  <!-- LEFT RING - top arc that's always visible in front -->
+  <path d="M 28 27 A 17 17 0 0 1 45 10 A 17 17 0 0 1 62 27"
+        fill="none" stroke="url(#goldL)" stroke-width="7" />
+  <path d="M 28 27 A 17 17 0 0 1 45 10 A 17 17 0 0 1 62 27"
+        fill="none" stroke="url(#highlightL)" stroke-width="4" />
+</svg>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Date - Beatrice & Florian</title>
+    <link href="https://fonts.googleapis.com/css2?family=Didot&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fcf9f5 0%, #f5ebe0 100%);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        /* Password Modal */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(55, 45, 40, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .password-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .password-modal {
+            background: #fcf9f5;
+            padding: 3rem 4rem;
+            border-radius: 4px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .password-modal h2 {
+            color: #372d28;
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.15em;
+        }
+
+        .password-modal p {
+            color: #7d6e64;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 1px solid #a47864;
+            border-radius: 4px;
+            background: transparent;
+            color: #372d28;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #372d28;
+        }
+
+        .password-input::placeholder {
+            color: #bbb;
+            letter-spacing: 0.1em;
+        }
+
+        .password-error {
+            color: #a47864;
+            font-size: 0.9rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-error.visible {
+            opacity: 1;
+        }
+
+        .password-submit {
+            padding: 0.8rem 2.5rem;
+            background: #372d28;
+            color: #fcf9f5;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .password-submit:hover {
+            background: #a47864;
+        }
+
+        /* Card Container */
+        .card-wrapper {
+            perspective: 2000px;
+            padding: 2rem;
+        }
+
+        .card-container {
+            position: relative;
+            width: 340px;
+            height: 604px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .card-container.opened {
+            transform: rotateY(-160deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-front {
+            background: #fcf9f5;
+            overflow: hidden;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .card-front::after {
+            content: 'Klicken zum Öffnen';
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(55, 45, 40, 0.8);
+            color: #fcf9f5;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-front:hover::after {
+            opacity: 1;
+        }
+
+        .card-container.opened .card-front::after {
+            opacity: 0;
+        }
+
+        .card-back {
+            background: linear-gradient(180deg, #fcf9f5 0%, #f8f3ed 100%);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* Card Inside Content */
+        .inside-content {
+            text-align: center;
+            color: #372d28;
+        }
+
+        .mountain-decoration {
+            width: 220px;
+            margin: -0.3rem auto 0.3rem auto;
+        }
+
+        .mountain-decoration img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .inside-header {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: #7d6e64;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            max-width: 280px;
+        }
+
+        .map-decoration {
+            width: 200px;
+            margin: 0.5rem auto 0.3rem auto;
+        }
+
+        .map-decoration img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .divider {
+            width: 1px;
+            height: 20px;
+            background: #a47864;
+            margin: 0.6rem auto;
+        }
+
+        .divider-short {
+            width: 1px;
+            height: 18px;
+            background: #a47864;
+            margin: 0.8rem auto;
+        }
+
+        .rings-decoration {
+            width: 90px;
+            margin: 0.8rem auto;
+        }
+
+        .rings-decoration img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .wedding-date {
+            font-size: 1.3rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.3rem;
+        }
+
+        .wedding-location {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: #7d6e64;
+            margin-bottom: 1rem;
+        }
+
+        /* Events Section */
+        .event-box {
+            text-align: center;
+        }
+
+        .event-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: #7d6e64;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+        }
+
+        .event-date {
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            color: #372d28;
+            margin-bottom: 0.2rem;
+        }
+
+        .event-location {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: #7d6e64;
+        }
+
+        /* Countdown */
+        .countdown-container {
+            margin-top: 0.5rem;
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: #7d6e64;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #372d28;
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: #7d6e64;
+            text-transform: uppercase;
+        }
+
+        /* Click hint on back */
+        .click-to-close {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.65rem;
+            color: #bbb;
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .card-container {
+                width: 300px;
+                height: 533px;
+            }
+
+            .password-modal {
+                padding: 2rem;
+            }
+
+            .inside-header {
+                font-size: 0.6rem;
+            }
+
+            .card-back {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Overlay -->
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-modal">
+            <h2>SAVE THE DATE</h2>
+            <p>Bitte Passwort eingeben</p>
+            <input type="password" class="password-input" id="passwordInput" placeholder="******" maxlength="6" autofocus>
+            <p class="password-error" id="passwordError">Falsches Passwort</p>
+            <button class="password-submit" id="passwordSubmit">Weiter</button>
+        </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card-wrapper">
+        <div class="card-container" id="card">
+            <!-- Front of card (Save the Date image) -->
+            <div class="card-front">
+                <img src="/assets/save-the-date-card.png" alt="Save the Date - Beatrice & Florian">
+            </div>
+
+            <!-- Back of card (Details) -->
+            <div class="card-back">
+                <div class="inside-content">
+                    <!-- Mountain Sunset Decoration -->
+                    <div class="mountain-decoration">
+                        <img src="/assets/mountain-sunset.svg" alt="">
+                    </div>
+
+                    <div class="inside-header">WIR HEIRATEN UND MÖCHTEN MIT EUCH FEIERN!</div>
+
+                    <div class="divider"></div>
+
+                    <!-- Civil Ceremony -->
+                    <div class="event-box">
+                        <div class="event-label">Standesamtliche Trauung</div>
+                        <div class="event-date">14. August 2026 | 11:15 Uhr</div>
+                        <div class="event-location">Rathaus Bad Aibling</div>
+                    </div>
+
+                    <div class="divider-short"></div>
+
+                    <!-- Main Wedding -->
+                    <div class="event-box">
+                        <div class="event-label">Freie Trauung & Feier</div>
+                        <div class="event-date">15. August 2026</div>
+                        <div class="event-location">Unternberg Hof | Ruhpolding</div>
+                    </div>
+
+                    <!-- Wedding Rings -->
+                    <div class="rings-decoration">
+                        <img src="/assets/wedding-rings.svg" alt="">
+                    </div>
+
+                    <div class="countdown-container">
+                        <div class="countdown-label">NOCH</div>
+                        <div class="countdown">
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="days">---</span>
+                                <span class="countdown-unit">Tage</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="hours">--</span>
+                                <span class="countdown-unit">Std</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="minutes">--</span>
+                                <span class="countdown-unit">Min</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="seconds">--</span>
+                                <span class="countdown-unit">Sek</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="click-to-close">Klicken zum Schließen</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const WEDDING_DATE = new Date('2026-08-15T14:00:00');
+
+        // Elements
+        const overlay = document.getElementById('passwordOverlay');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordSubmit = document.getElementById('passwordSubmit');
+        const passwordError = document.getElementById('passwordError');
+        const card = document.getElementById('card');
+
+        // Check session storage for previous authentication
+        if (sessionStorage.getItem('saveTheDateFamilyAuth') === 'true') {
+            overlay.classList.add('hidden');
+        }
+
+        // Password validation via server
+        async function validatePassword() {
+            try {
+                const response = await fetch('/save-the-date-family/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: passwordInput.value })
+                });
+
+                if (response.ok) {
+                    sessionStorage.setItem('saveTheDateFamilyAuth', 'true');
+                    overlay.classList.add('hidden');
+                } else {
+                    showError();
+                }
+            } catch (e) {
+                showError();
+            }
+        }
+
+        function showError() {
+            passwordError.classList.add('visible');
+            passwordInput.value = '';
+            passwordInput.focus();
+            setTimeout(() => {
+                passwordError.classList.remove('visible');
+            }, 2000);
+        }
+
+        passwordSubmit.addEventListener('click', validatePassword);
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                validatePassword();
+            }
+        });
+
+        // Card flip
+        card.addEventListener('click', () => {
+            card.classList.toggle('opened');
+        });
+
+        // Countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const diff = WEDDING_DATE - now;
+
+            if (diff <= 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // Initial update and start interval
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
