@@ -339,7 +339,7 @@
         }
 
         .rsvp-label {
-            font-size: 0.8rem;
+            font-size: 1rem;
             letter-spacing: 0.08em;
             color: #7d6e64;
             margin-bottom: 0.8rem;
@@ -521,11 +521,25 @@
             }
         }
 
-        /* Mobile - reduce top spacing */
+        /* Mobile - reduce top spacing and fix RSVP layout */
         @media (max-width: 767px) {
             body {
                 align-items: flex-start;
                 padding-top: 1rem;
+            }
+
+            .rsvp-guest {
+                flex-wrap: wrap;
+            }
+
+            .rsvp-guest input[type="text"] {
+                width: 100%;
+                flex: none;
+                margin-bottom: 0.3rem;
+            }
+
+            .rsvp-checkbox {
+                flex: 1;
             }
         }
 
