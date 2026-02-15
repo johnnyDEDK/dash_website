@@ -166,7 +166,7 @@
         }
 
         .card-container.opened {
-            transform: rotateY(-160deg);
+            transform: rotateY(-180deg);
         }
 
         .card-front, .card-back {
@@ -390,6 +390,14 @@
         @media (hover: hover) and (pointer: fine) {
             .click-to-close::before {
                 content: 'Klicken zum Schließen';
+            }
+        }
+
+        /* Mobile - reduce top spacing */
+        @media (max-width: 767px) {
+            body {
+                align-items: flex-start;
+                padding-top: 1rem;
             }
         }
 
