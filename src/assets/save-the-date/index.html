@@ -12,14 +12,23 @@
             box-sizing: border-box;
         }
 
+        html {
+            /* Prevent font scaling on orientation change */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             min-height: 100vh;
+            min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
             display: flex;
             justify-content: center;
             align-items: center;
             background: linear-gradient(135deg, #fcf9f5 0%, #f5ebe0 100%);
             font-family: 'Cormorant Garamond', serif;
             overflow-x: hidden;
+            /* Safe area padding for notched phones */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
         /* Password Modal */
@@ -71,6 +80,8 @@
             width: 100%;
             padding: 1rem;
             font-size: 1.5rem;
+            /* Minimum 16px to prevent iOS zoom on focus */
+            font-size: max(1.5rem, 16px);
             text-align: center;
             border: 1px solid #a47864;
             border-radius: 4px;
@@ -79,6 +90,8 @@
             font-family: 'Cormorant Garamond', serif;
             letter-spacing: 0.3em;
             margin-bottom: 1rem;
+            /* Better touch target */
+            min-height: 48px;
         }
 
         .password-input:focus {
@@ -115,26 +128,42 @@
             letter-spacing: 0.15em;
             cursor: pointer;
             transition: background 0.3s ease;
+            /* Better touch target */
+            min-height: 48px;
+            min-width: 120px;
         }
 
         .password-submit:hover {
             background: #a47864;
         }
 
+        /* Active state for touch feedback */
+        .password-submit:active {
+            background: #8a6858;
+            transform: scale(0.98);
+        }
+
         /* Card Container */
         .card-wrapper {
             perspective: 2000px;
-            padding: 2rem;
+            padding: clamp(1rem, 4vw, 2rem);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .card-container {
             position: relative;
-            width: 340px;
-            min-height: 604px;
+            /* Fluid width with min/max constraints */
+            width: clamp(280px, 85vw, 340px);
+            min-height: clamp(500px, 150vw, 604px);
             height: auto;
             cursor: pointer;
             transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            /* Ensure touch events work smoothly */
+            touch-action: manipulation;
         }
 
         .card-container.opened {
@@ -144,9 +173,10 @@
         .card-front, .card-back {
             position: absolute;
             width: 100%;
-            min-height: 604px;
+            min-height: clamp(500px, 150vw, 604px);
             height: auto;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             border-radius: 8px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         }
@@ -164,7 +194,7 @@
         }
 
         .card-front::after {
-            content: 'Klicken zum Öffnen';
+            content: 'Tippen zum Öffnen';
             position: absolute;
             bottom: 20px;
             left: 50%;
@@ -175,12 +205,22 @@
             border-radius: 20px;
             font-size: 0.85rem;
             letter-spacing: 0.1em;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease;
+            /* Prevent text selection */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        .card-front:hover::after {
-            opacity: 1;
+        /* Hide hint on hover-capable devices until hover */
+        @media (hover: hover) and (pointer: fine) {
+            .card-front::after {
+                content: 'Klicken zum Öffnen';
+                opacity: 0;
+            }
+            .card-front:hover::after {
+                opacity: 1;
+            }
         }
 
         .card-container.opened .card-front::after {
@@ -291,15 +331,6 @@
             text-transform: uppercase;
         }
 
-        /* Click hint on back */
-        .click-to-close {
-            position: absolute;
-            bottom: 15px;
-            font-size: 0.7rem;
-            color: #bbb;
-            letter-spacing: 0.1em;
-        }
-
         /* RSVP Section */
         .rsvp-section {
             width: 100%;
@@ -328,9 +359,12 @@
             border: 1px solid #c4b0a0;
             border-radius: 3px;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
+            /* Minimum 16px to prevent iOS zoom on focus */
+            font-size: max(0.9rem, 16px);
             background: rgba(255,255,255,0.5);
             color: #372d28;
+            /* Better touch target */
+            min-height: 44px;
         }
 
         .rsvp-guest input[type="text"]:focus {
@@ -347,17 +381,22 @@
             align-items: center;
             gap: 0.3rem;
             white-space: nowrap;
+            /* Better touch area */
+            padding: 0.25rem 0;
         }
 
         .rsvp-checkbox input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            /* Larger touch target for checkbox */
+            width: 22px;
+            height: 22px;
             accent-color: #a47864;
+            cursor: pointer;
         }
 
         .rsvp-checkbox label {
-            font-size: 0.8rem;
-            color: #7d6e64;
+            cursor: pointer;
+            /* Larger tap area for label */
+            padding: 0.25rem;
         }
 
         .rsvp-guest .remove-guest {
@@ -365,12 +404,19 @@
             border: none;
             color: #c4b0a0;
             cursor: pointer;
-            font-size: 1.2rem;
-            padding: 0 0.2rem;
+            font-size: 1.4rem;
+            /* Better touch target */
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             line-height: 1;
         }
 
-        .rsvp-guest .remove-guest:hover {
+        .rsvp-guest .remove-guest:hover,
+        .rsvp-guest .remove-guest:active {
             color: #a47864;
         }
 
@@ -386,15 +432,18 @@
             background: none;
             border: 1px dashed #c4b0a0;
             color: #7d6e64;
-            padding: 0.4rem 0.8rem;
+            padding: 0.5rem 1rem;
             border-radius: 3px;
             font-family: 'Cormorant Garamond', serif;
             font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            /* Better touch target */
+            min-height: 44px;
         }
 
-        .add-guest-btn:hover {
+        .add-guest-btn:hover,
+        .add-guest-btn:active {
             border-color: #a47864;
             color: #a47864;
         }
@@ -409,16 +458,24 @@
             font-size: 0.85rem;
             letter-spacing: 0.1em;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, transform 0.1s ease;
+            /* Better touch target */
+            min-height: 44px;
         }
 
         .submit-rsvp-btn:hover {
             background: #8a6858;
         }
 
+        .submit-rsvp-btn:active {
+            background: #7a5848;
+            transform: scale(0.98);
+        }
+
         .submit-rsvp-btn:disabled {
             background: #c4b0a0;
             cursor: not-allowed;
+            transform: none;
         }
 
         .rsvp-success {
@@ -444,17 +501,88 @@
             margin: 1rem auto;
         }
 
-        /* Responsive */
-        @media (max-width: 400px) {
+        /* Click to close hint - mobile version */
+        .click-to-close {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.7rem;
+            color: #bbb;
+            letter-spacing: 0.1em;
+        }
+
+        /* Show "tap" on touch devices, "click" on desktop */
+        .click-to-close::before {
+            content: 'Tippen zum Schließen';
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .click-to-close::before {
+                content: 'Klicken zum Schließen';
+            }
+        }
+
+        /* Responsive - Small phones */
+        @media (max-width: 350px) {
+            .card-wrapper {
+                padding: 0.5rem;
+            }
+
             .card-container {
-                width: 300px;
-                min-height: 533px;
+                width: 95vw;
+                max-width: 280px;
             }
 
-            .card-front, .card-back {
-                min-height: 533px;
+            .password-modal {
+                padding: 1.5rem;
+                width: 95%;
             }
 
+            .password-modal h2 {
+                font-size: 1.5rem;
+            }
+
+            .inside-header {
+                font-size: 0.65rem;
+            }
+
+            .wedding-date {
+                font-size: 1.2rem;
+            }
+
+            .wedding-location {
+                font-size: 0.75rem;
+            }
+
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+
+            .rsvp-label {
+                font-size: 0.7rem;
+            }
+
+            .rsvp-guest {
+                flex-wrap: wrap;
+            }
+
+            .rsvp-guest input[type="text"] {
+                width: 100%;
+                margin-bottom: 0.3rem;
+            }
+
+            .rsvp-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .add-guest-btn,
+            .submit-rsvp-btn {
+                width: 100%;
+            }
+        }
+
+        /* Medium phones */
+        @media (max-width: 400px) and (min-width: 351px) {
             .password-modal {
                 padding: 2rem;
             }
@@ -472,6 +600,66 @@
                 margin-bottom: 0.3rem;
             }
         }
+
+        /* Landscape mode on phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                min-height: 100vh;
+                align-items: flex-start;
+                padding-top: 1rem;
+            }
+
+            .card-wrapper {
+                padding: 0.5rem;
+            }
+
+            .card-container {
+                width: 45vh;
+                min-height: 80vh;
+            }
+
+            .card-front, .card-back {
+                min-height: 80vh;
+            }
+
+            .password-overlay {
+                align-items: flex-start;
+                padding-top: 2rem;
+            }
+
+            .mountain-decoration {
+                width: 150px;
+            }
+
+            .rings-decoration {
+                width: 80px;
+                margin: 0.5rem auto;
+            }
+
+            .divider, .divider-short {
+                height: 15px;
+                margin: 0.5rem auto;
+            }
+
+            .countdown-container {
+                margin-top: 0.5rem;
+            }
+
+            .countdown-number {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Tablet and larger */
+        @media (min-width: 768px) {
+            .card-container {
+                width: 340px;
+            }
+
+            .card-front, .card-back {
+                min-height: 604px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -480,7 +668,7 @@
         <div class="password-modal">
             <h2>SAVE THE DATE</h2>
             <p>Bitte Passwort eingeben</p>
-            <input type="password" class="password-input" id="passwordInput" placeholder="******" maxlength="6" autofocus>
+            <input type="password" class="password-input" id="passwordInput" placeholder="******" maxlength="6" inputmode="numeric" autocomplete="off" autofocus>
             <p class="password-error" id="passwordError">Falsches Passwort</p>
             <button class="password-submit" id="passwordSubmit">Weiter</button>
         </div>
@@ -560,7 +748,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="click-to-close">Klicken zum Schließen</div>
+                <div class="click-to-close"></div>
             </div>
         </div>
     </div>

@@ -12,14 +12,23 @@
             box-sizing: border-box;
         }
 
+        html {
+            /* Prevent font scaling on orientation change */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             min-height: 100vh;
+            min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
             display: flex;
             justify-content: center;
             align-items: center;
             background: linear-gradient(135deg, #fcf9f5 0%, #f5ebe0 100%);
             font-family: 'Cormorant Garamond', serif;
             overflow-x: hidden;
+            /* Safe area padding for notched phones */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
         /* Password Modal */
@@ -71,6 +80,8 @@
             width: 100%;
             padding: 1rem;
             font-size: 1.5rem;
+            /* Minimum 16px to prevent iOS zoom on focus */
+            font-size: max(1.5rem, 16px);
             text-align: center;
             border: 1px solid #a47864;
             border-radius: 4px;
@@ -79,6 +90,8 @@
             font-family: 'Cormorant Garamond', serif;
             letter-spacing: 0.3em;
             margin-bottom: 1rem;
+            /* Better touch target */
+            min-height: 48px;
         }
 
         .password-input:focus {
@@ -115,25 +128,41 @@
             letter-spacing: 0.15em;
             cursor: pointer;
             transition: background 0.3s ease;
+            /* Better touch target */
+            min-height: 48px;
+            min-width: 120px;
         }
 
         .password-submit:hover {
             background: #a47864;
         }
 
+        /* Active state for touch feedback */
+        .password-submit:active {
+            background: #8a6858;
+            transform: scale(0.98);
+        }
+
         /* Card Container */
         .card-wrapper {
             perspective: 2000px;
-            padding: 2rem;
+            padding: clamp(1rem, 4vw, 2rem);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .card-container {
             position: relative;
-            width: 340px;
-            height: 604px;
+            /* Fluid width with min/max constraints */
+            width: clamp(280px, 85vw, 340px);
+            height: clamp(500px, 150vw, 604px);
             cursor: pointer;
             transform-style: preserve-3d;
             transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            /* Ensure touch events work smoothly */
+            touch-action: manipulation;
         }
 
         .card-container.opened {
@@ -145,6 +174,7 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             border-radius: 8px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         }
@@ -162,7 +192,7 @@
         }
 
         .card-front::after {
-            content: 'Klicken zum Öffnen';
+            content: 'Tippen zum Öffnen';
             position: absolute;
             bottom: 20px;
             left: 50%;
@@ -173,12 +203,22 @@
             border-radius: 20px;
             font-size: 0.85rem;
             letter-spacing: 0.1em;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease;
+            /* Prevent text selection */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        .card-front:hover::after {
-            opacity: 1;
+        /* Hide hint on hover-capable devices until hover */
+        @media (hover: hover) and (pointer: fine) {
+            .card-front::after {
+                content: 'Klicken zum Öffnen';
+                opacity: 0;
+            }
+            .card-front:hover::after {
+                opacity: 1;
+            }
         }
 
         .card-container.opened .card-front::after {
@@ -342,13 +382,75 @@
             letter-spacing: 0.1em;
         }
 
-        /* Responsive */
-        @media (max-width: 400px) {
-            .card-container {
-                width: 300px;
-                height: 533px;
+        /* Show "tap" on touch devices, "click" on desktop */
+        .click-to-close::before {
+            content: 'Tippen zum Schließen';
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .click-to-close::before {
+                content: 'Klicken zum Schließen';
+            }
+        }
+
+        /* Responsive - Small phones */
+        @media (max-width: 350px) {
+            .card-wrapper {
+                padding: 0.5rem;
             }
 
+            .card-container {
+                width: 95vw;
+                max-width: 280px;
+                height: auto;
+                min-height: 500px;
+            }
+
+            .card-front, .card-back {
+                height: auto;
+                min-height: 500px;
+            }
+
+            .password-modal {
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            .password-modal h2 {
+                font-size: 1.5rem;
+            }
+
+            .inside-header {
+                font-size: 0.55rem;
+            }
+
+            .event-date {
+                font-size: 0.95rem;
+            }
+
+            .event-location {
+                font-size: 0.7rem;
+            }
+
+            .countdown-number {
+                font-size: 1.3rem;
+            }
+
+            .mountain-decoration {
+                width: 180px;
+            }
+
+            .rings-decoration {
+                width: 70px;
+            }
+
+            .card-back {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Medium phones */
+        @media (max-width: 400px) and (min-width: 351px) {
             .password-modal {
                 padding: 2rem;
             }
@@ -361,6 +463,95 @@
                 padding: 1rem;
             }
         }
+
+        /* Landscape mode on phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                min-height: 100vh;
+                align-items: flex-start;
+                padding-top: 1rem;
+            }
+
+            .card-wrapper {
+                padding: 0.5rem;
+            }
+
+            .card-container {
+                width: 45vh;
+                height: 85vh;
+            }
+
+            .card-front, .card-back {
+                height: 85vh;
+            }
+
+            .password-overlay {
+                align-items: flex-start;
+                padding-top: 2rem;
+            }
+
+            .mountain-decoration {
+                width: 140px;
+                margin: 0 auto 0.2rem auto;
+            }
+
+            .rings-decoration {
+                width: 60px;
+                margin: 0.4rem auto;
+            }
+
+            .divider, .divider-short {
+                height: 12px;
+                margin: 0.3rem auto;
+            }
+
+            .inside-header {
+                font-size: 0.55rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .event-label {
+                font-size: 0.6rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .event-date {
+                font-size: 0.9rem;
+            }
+
+            .event-location {
+                font-size: 0.65rem;
+            }
+
+            .countdown-container {
+                margin-top: 0.3rem;
+            }
+
+            .countdown-label {
+                font-size: 0.6rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .countdown-number {
+                font-size: 1.2rem;
+            }
+
+            .countdown-unit {
+                font-size: 0.5rem;
+            }
+        }
+
+        /* Tablet and larger */
+        @media (min-width: 768px) {
+            .card-container {
+                width: 340px;
+                height: 604px;
+            }
+
+            .card-front, .card-back {
+                height: 604px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -369,7 +560,7 @@
         <div class="password-modal">
             <h2>SAVE THE DATE</h2>
             <p>Bitte Passwort eingeben</p>
-            <input type="password" class="password-input" id="passwordInput" placeholder="******" maxlength="6" autofocus>
+            <input type="password" class="password-input" id="passwordInput" placeholder="******" maxlength="6" inputmode="numeric" autocomplete="off" autofocus>
             <p class="password-error" id="passwordError">Falsches Passwort</p>
             <button class="password-submit" id="passwordSubmit">Weiter</button>
         </div>
@@ -438,7 +629,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="click-to-close">Klicken zum Schließen</div>
+                <div class="click-to-close"></div>
             </div>
         </div>
     </div>
