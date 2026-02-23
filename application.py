@@ -359,7 +359,7 @@ class Navigation(DashBasePage):
             try:
                 resend.api_key = RESEND_API_KEY
                 resend.Emails.send({
-                    "from": "Kontaktformular <onboarding@resend.dev>",
+                    "from": "kontakt@beas-coaching.de",
                     "to": NOTIFICATION_EMAIL,
                     "subject": f"Kontaktformular beas-coaching.de - {firstname} {lastname}",
                     "text": f"Von: {firstname} {lastname}\nE-Mail: {email}\n\nNachricht:\n{text}"
@@ -491,7 +491,7 @@ Diese E-Mail wurde automatisch generiert.
 """
 
             resend.Emails.send({
-                "from": "RSVP Hochzeit <onboarding@resend.dev>",
+                "from": "kontakt@beas-coaching.de",
                 "to": RSVP_EMAILS,
                 "subject": f"RSVP Hochzeit - {new_attending_count} neue Zusage(n) | Gesamt: {total_attending} Zusagen",
                 "text": email_text
