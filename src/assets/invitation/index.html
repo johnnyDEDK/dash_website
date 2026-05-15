@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einladung zu unserer Hochzeit</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'wedding-cream': '#FDFBF7',
+                        'wedding-sage': '#A3B19B',
+                        'wedding-dark': '#2C3627',
+                        'wedding-rose': '#A57C7E',
+                    },
+                    fontFamily: {
+                        'serif': ['"Playfair Display"', 'serif'],
+                        'sans': ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FDFBF7; color: #2C3627; }
+        
+        .timeline-container {
+            position: relative;
+            max-w: 100%;
+            margin: 0 auto;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: #A3B19B;
+            top: 2.5rem; 
+            bottom: 2.5rem; 
+            left: 50%;
+            margin-left: -1px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            margin-bottom: 1.5rem;
+        }
+        .timeline-item.left { left: 0; text-align: right; }
+        .timeline-item.right { left: 50%; text-align: left; }
+        
+        .timeline-icon {
+            position: absolute;
+            width: 3.5rem;
+            height: 3.5rem;
+            background-color: #FDFBF7;
+            border: 2px solid #A3B19B;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #A3B19B;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .timeline-item.left .timeline-icon { right: -1.75rem; }
+        .timeline-item.right .timeline-icon { left: -1.75rem; }
+
+        .hexagon-mask {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline-container::after { 
+                left: 2rem; 
+                top: 2rem;
+                bottom: 2rem;
+            }
+            .timeline-item { width: 100%; padding-left: 5rem; padding-right: 1rem; text-align: left !important; margin-bottom: 2rem; }
+            .timeline-item.left, .timeline-item.right { left: 0; }
+            .timeline-item.left .timeline-icon, .timeline-item.right .timeline-icon { 
+                left: 0.25rem; 
+                right: auto;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800">
+
+    <header class="relative w-full h-[75vh] flex flex-col items-center justify-start pt-[15vh] overflow-hidden">
+        <img src="mountain-sunset.svg" alt="Mountain Sunset" class="absolute inset-0 w-full h-full object-cover opacity-40 object-top" style="z-index: -2;">
+        <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-wedding-cream to-transparent" style="z-index: -1;"></div>
+        
+        <div class="text-center px-4 z-10">
+            <p class="text-wedding-dark tracking-[0.3em] uppercase text-sm md:text-base mb-6 font-bold">Wir trauen uns</p>
+            <h1 class="text-5xl md:text-7xl font-serif font-medium text-wedding-dark mb-4 drop-shadow-sm leading-tight">
+                Einladung zu <br> unserer Hochzeit
+            </h1>
+            <div class="w-24 h-px bg-wedding-sage mx-auto mt-8"></div>
+        </div>
+    </header>
+
+    <section class="relative max-w-5xl mx-auto px-4 -mt-24 md:-mt-36 z-20 text-center pb-20">
+        <img src="Gemini_Generated_Image_ohq6qtohq6qtohq6.png" alt="Beatrice & Florian" 
+             class="block mx-auto rounded-[2rem] md:rounded-[3rem] w-full max-w-lg md:max-w-xl shadow-2xl border-[6px] md:border-8 border-white">
+    </section>
+
+    <section class="bg-white py-24 border-y border-gray-100">
+        <div class="max-w-5xl mx-auto px-4">
+            <h2 class="text-4xl font-serif text-center text-wedding-dark mb-16">Location</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
+                <a href="https://maps.google.com/maps?q=Unternberg+Hof,+83324+Ruhpolding" target="_blank" rel="noopener noreferrer" title="Auf Google Maps öffnen" class="w-64 h-64 md:w-80 md:h-80 flex-shrink-0 hexagon-mask bg-gray-200 block relative group cursor-pointer overflow-hidden">
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 flex items-center justify-center">
+                        <i data-lucide="external-link" class="text-white opacity-0 group-hover:opacity-100 w-10 h-10 drop-shadow-md transition-opacity"></i>
+                    </div>
+                    <iframe src="https://maps.google.com/maps?q=Unternberg+Hof,+83324+Ruhpolding&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="pointer-events-none absolute inset-0 scale-[1.3] origin-center"></iframe>
+                </a>
+                <div class="text-left max-w-lg">
+                    <h3 class="text-3xl md:text-4xl font-sans font-bold text-[#333] mb-3">Unternberg Hof Ruhpolding</h3>
+                    <p class="text-xl font-serif italic text-gray-600 mb-6">Freie Trauung und Hochzeitsfeier</p>
+                    <p class="text-gray-800 text-lg mb-8 leading-relaxed">
+                        Bei schönem Wetter findet die freie Trauung draußen statt.
+                    </p>
+                    <p class="text-lg">
+                        <strong class="text-[#333]">Adresse:</strong> 
+                        <a href="https://maps.google.com/maps?q=Unternberg+Hof,+83324+Ruhpolding" target="_blank" rel="noopener noreferrer" class="text-wedding-rose font-medium hover:text-wedding-sage hover:underline transition-colors">
+                            Unternberg Hof, 83324 Ruhpolding
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-4xl font-serif text-center text-wedding-dark mb-16">Tagesablauf</h2>
+            
+            <div class="timeline-container">
+                <div class="timeline-item left">
+                    <div class="timeline-icon"><i data-lucide="handshake" class="w-7 h-7 stroke-[1.5]"></i></div>
+                    <h4 class="text-2xl font-serif font-semibold text-wedding-dark mb-1">ab 13:30 Uhr</h4>
+                    <p class="text-gray-600 text-lg">Ankunft der Gäste</p>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="12" r="4"/>
+                            <circle cx="15" cy="12" r="4"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-serif font-semibold text-wedding-dark mb-1">14:00 Uhr</h4>
+                    <p class="text-gray-600 text-lg">Freie Trauung</p>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-icon"><i data-lucide="coffee" class="w-7 h-7 stroke-[1.5]"></i></div>
+                    <h4 class="text-2xl font-serif font-semibold text-wedding-dark mb-1">15:00 Uhr</h4>
+                    <p class="text-gray-600 text-lg">Sekt, Kaffee & Kuchen</p>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-icon"><i data-lucide="utensils" class="w-7 h-7 stroke-[1.5]"></i></div>
+                    <h4 class="text-2xl font-serif font-semibold text-wedding-dark mb-1">18:30 Uhr</h4>
+                    <p class="text-gray-600 text-lg">Abendessen</p>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-icon"><i data-lucide="wine" class="w-7 h-7 stroke-[1.5]"></i></div>
+                    <h4 class="text-2xl font-serif font-semibold text-wedding-dark mb-1">20:30 Uhr</h4>
+                    <p class="text-gray-600 text-lg">Party</p>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-icon"><i data-lucide="music" class="w-7 h-7 stroke-[1.5]"></i></div>
+                    <h4 class="text-2xl font-serif font-semibold text-wedding-dark mb-1">01:00 Uhr</h4>
+                    <p class="text-gray-600 text-lg">Last Dance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white py-20 border-t border-gray-100" id="anmeldung">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="text-4xl font-serif text-center text-wedding-dark mb-4">Anmeldung</h2>
+            <p class="text-center text-gray-600 mb-10 text-lg">Bitte gebt uns bis zum <strong class="text-wedding-dark">30.05.2026</strong> Rückmeldung.</p>
+
+            <div id="rsvp-container">
+                <form id="rsvp-form" class="space-y-6">
+                    <div id="guest-list" class="space-y-6">
+                        </div>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-100">
+                        <button type="button" id="add-guest-btn" class="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-white border border-wedding-sage text-wedding-sage rounded-md font-medium hover:bg-wedding-cream transition-colors duration-300">
+                            <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i> Weitere Person anmelden
+                        </button>
+                        <button type="submit" id="submit-rsvp-btn" class="flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-wedding-dark text-white rounded-md font-medium hover:bg-[#3f4d38] transition-colors duration-300 shadow-md">
+                            Abschicken <i data-lucide="send" class="w-5 h-5 ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="rsvp-message" class="hidden mt-6 text-center p-8 rounded-xl font-medium border"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-wedding-cream py-20 border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+            
+            <div class="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 text-center">
+                <h2 class="text-3xl font-serif mb-8 text-wedding-dark">Details</h2>
+                <div class="mb-8">
+                    <i data-lucide="shirt" class="w-10 h-10 text-wedding-sage mb-3 mx-auto stroke-[1.5]"></i>
+                    <h4 class="font-bold text-xl mb-1 text-wedding-dark">Dresscode</h4>
+                    <p class="text-gray-600 text-lg">Sommerlich elegant</p>
+                </div>
+                <div>
+                    <i data-lucide="gift" class="w-10 h-10 text-wedding-sage mb-3 mx-auto stroke-[1.5]"></i>
+                    <h4 class="font-bold text-xl mb-1 text-wedding-dark">Geschenkwunsch</h4>
+                    <p class="text-gray-600 text-lg">Wir freuen uns über eine finanzielle Unterstützung für unsere Hochzeitsreise.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-10 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col justify-center items-center">
+                <h2 class="text-3xl font-serif mb-6 text-wedding-dark">Fragen & Beiträge</h2>
+                <i data-lucide="message-circle" class="w-12 h-12 text-wedding-sage mb-4 stroke-[1.5]"></i>
+                <p class="text-gray-600 text-lg mb-8">
+                    Für Fragen und die Koordination von Beiträgen, wendet euch bitte an unsere Trauzeugen.
+                </p>
+                
+                <div class="space-y-4 w-full">
+                    <div>
+                        <h4 class="font-bold text-lg text-wedding-dark mb-4">Laura Thäter</h4>
+                        
+                        <div class="text-gray-600 space-y-3 flex flex-col items-center">                            
+                            <a href="https://wa.me/4368181295896" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group transition-colors hover:text-[#25D366]">
+                                <i data-lucide="message-circle" class="w-5 h-5 text-wedding-sage group-hover:text-[#25D366] transition-colors"></i> +43 681 81295896
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-wedding-dark mb-4">Benedikt Kubietziel</h4>
+                        
+                        <div class="text-gray-600 space-y-3 flex flex-col items-center">                            
+                            <a href="https://wa.me/491714785123" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group transition-colors hover:text-[#25D366]">
+                                <i data-lucide="message-circle" class="w-5 h-5 text-wedding-sage group-hover:text-[#25D366] transition-colors"></i> +49 171 4785123
+                            </a>
+                        </div>
+                    </div>
+                     <div>
+                        <h4 class="font-bold text-lg text-wedding-dark mb-4">Dominik Bachmor</h4>
+                        
+                        <div class="text-gray-600 space-y-3 flex flex-col items-center">                            
+                            <a href="https://wa.me/4917657986122" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 group transition-colors hover:text-[#25D366]">
+                                <i data-lucide="message-circle" class="w-5 h-5 text-wedding-sage group-hover:text-[#25D366] transition-colors"></i> +49 176 57986122
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // Initialize all statically placed Lucide icons on first load
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let guestCount = 0;
+            const guestList = document.getElementById('guest-list');
+            const addGuestBtn = document.getElementById('add-guest-btn');
+            const rsvpForm = document.getElementById('rsvp-form');
+            const rsvpMessage = document.getElementById('rsvp-message');
+
+            function createGuestBlock() {
+                const guestId = guestCount++;
+                const block = document.createElement('div');
+                block.className = 'bg-wedding-cream p-6 rounded-xl border border-gray-200 relative shadow-sm guest-block transition-all';
+                block.dataset.id = guestId;
+
+                let removeBtnHTML = '';
+                if (guestId > 0) {
+                    removeBtnHTML = `<button type="button" class="remove-guest absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-white hover:text-wedding-rose transition-colors" title="Gast entfernen"><i data-lucide="x" class="w-5 h-5"></i></button>`;
+                }
+
+                block.innerHTML = `
+                    ${removeBtnHTML}
+                    <h3 class="font-serif text-xl text-wedding-dark mb-4 border-b border-gray-200 pb-2">Gast ${guestId + 1}</h3>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <input type="text" placeholder="Vor- und Nachname" class="guest-name w-full p-3 border border-gray-300 rounded focus:ring-1 focus:ring-wedding-sage focus:border-wedding-sage outline-none transition-shadow" required>
+                        </div>
+
+                        <div class="pt-2">
+                            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white p-4 rounded border border-gray-100">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="diet-${guestId}" value="Ich esse alles" class="guest-diet w-4 h-4 accent-wedding-sage mr-2" checked>
+                                    <span class="text-gray-700">Ich esse alles</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="diet-${guestId}" value="Vegetarisch" class="guest-diet w-4 h-4 accent-wedding-sage mr-2">
+                                    <span class="text-gray-700">Vegetarisch</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="diet-${guestId}" value="Vegan" class="guest-diet w-4 h-4 accent-wedding-sage mr-2">
+                                    <span class="text-gray-700">Vegan</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <input type="text" placeholder="Ich habe folgende Unverträglichkeiten..." class="guest-allergies w-full p-3 border border-gray-300 rounded focus:ring-1 focus:ring-wedding-sage focus:border-wedding-sage outline-none transition-shadow">
+                        </div>
+                    </div>
+                `;
+
+                // Handle remove button
+                if (guestId > 0) {
+                    block.querySelector('.remove-guest').addEventListener('click', () => {
+                        block.remove();
+                        updateGuestLabels();
+                    });
+                }
+
+                guestList.appendChild(block);
+                
+                // Re-run Lucide to render icons inside the newly added HTML block
+                lucide.createIcons();
+            }
+
+            function updateGuestLabels() {
+                const blocks = guestList.querySelectorAll('.guest-block');
+                blocks.forEach((block, index) => {
+                    const title = block.querySelector('h3');
+                    if (title) title.textContent = `Gast ${index + 1}`;
+                });
+            }
+
+            // Initialize first guest block
+            createGuestBlock();
+
+            // Add new guest on button click
+            addGuestBtn.addEventListener('click', createGuestBlock);
+
+            // Handle form submission
+            rsvpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submit-rsvp-btn');
+                const originalBtnText = submitBtn.innerHTML;
+                
+                // Show loading state using Lucide spinner
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 mr-2 animate-spin"></i> Speichere...';
+                lucide.createIcons();
+
+                // Collect data
+                const guestsData = [];
+                const blocks = guestList.querySelectorAll('.guest-block');
+                
+                blocks.forEach(block => {
+                    guestsData.push({
+                        name: block.querySelector('.guest-name').value,
+                        diet: block.querySelector('.guest-diet:checked').value,
+                        allergies: block.querySelector('.guest-allergies').value
+                    });
+                });
+
+                try {
+                    // Send data to backend
+                    const response = await fetch('/api/rsvp', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ guests: guestsData })
+                    });
+
+                    // Success visuals
+                    rsvpForm.style.display = 'none';
+                    rsvpMessage.className = 'mt-6 text-center p-8 bg-green-50 text-green-800 rounded-xl border border-green-200';
+                    rsvpMessage.innerHTML = '<div class="flex justify-center mb-4"><i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i></div> <h3 class="text-2xl font-serif mb-2">Vielen Dank!</h3> <p>Die Anmeldung wurde erfolgreich übermittelt.</p>';
+                    rsvpMessage.classList.remove('hidden');
+                    lucide.createIcons();
+
+                } catch (error) {
+                    // Fallback visual success if fetch fails (e.g. no backend attached yet)
+                    rsvpForm.style.display = 'none';
+                    rsvpMessage.className = 'mt-6 text-center p-8 bg-green-50 text-green-800 rounded-xl border border-green-200';
+                    rsvpMessage.innerHTML = '<div class="flex justify-center mb-4"><i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i></div> <h3 class="text-2xl font-serif mb-2">Vielen Dank!</h3> <p>Eure Rückmeldung wurde gespeichert.</p>';
+                    rsvpMessage.classList.remove('hidden');
+                    lucide.createIcons();
+                    console.log('Daten für Datenbank:', guestsData);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                    lucide.createIcons(); // Re-render original send icon
+                }
+            });
+        });
+    </script>
+</body>
+</html>

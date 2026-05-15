@@ -1,0 +1,178 @@
+<svg viewBox="0 0 200 58" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Horizontal fade mask - very soft edges -->
+    <linearGradient id="hFade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="white" stop-opacity="0" />
+      <stop offset="12%" stop-color="white" stop-opacity="0.5" />
+      <stop offset="28%" stop-color="white" stop-opacity="0.9" />
+      <stop offset="42%" stop-color="white" stop-opacity="1" />
+      <stop offset="58%" stop-color="white" stop-opacity="1" />
+      <stop offset="72%" stop-color="white" stop-opacity="0.9" />
+      <stop offset="88%" stop-color="white" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Vertical fade - bottom fades out -->
+    <linearGradient id="vFade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="1" />
+      <stop offset="72%" stop-color="white" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+
+    <mask id="fadeMask">
+      <rect x="0" y="0" width="200" height="58" fill="url(#hFade)" />
+    </mask>
+
+    <mask id="fullFade">
+      <rect x="0" y="0" width="200" height="58" fill="url(#vFade)" mask="url(#fadeMask)" />
+    </mask>
+
+    <!-- Sky gradient - soft sunset -->
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c0a090" stop-opacity="0.15" />
+      <stop offset="30%" stop-color="#d8a888" stop-opacity="0.3" />
+      <stop offset="60%" stop-color="#e8b890" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#f0c898" stop-opacity="0.3" />
+    </linearGradient>
+
+    <!-- Sun disc gradient -->
+    <radialGradient id="sunDisc" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8e8" stop-opacity="0.8" />
+      <stop offset="35%" stop-color="#f8e8c8" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#f0d8b0" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Sun glow -->
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0c890" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#e0b080" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Layer 1 - Most distant, very faint -->
+    <linearGradient id="layer1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c8b8a8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#b8a898" stop-opacity="0.18" />
+    </linearGradient>
+
+    <!-- Layer 2 - Distant -->
+    <linearGradient id="layer2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#b8a898" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#a89888" stop-opacity="0.28" />
+    </linearGradient>
+
+    <!-- Layer 3 - Mid distance -->
+    <linearGradient id="layer3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a89080" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#988878" stop-opacity="0.4" />
+    </linearGradient>
+
+    <!-- Layer 4 - Closer -->
+    <linearGradient id="layer4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#988070" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#887868" stop-opacity="0.55" />
+    </linearGradient>
+
+    <!-- Layer 5 - Foreground -->
+    <linearGradient id="layer5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#807060" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#686058" stop-opacity="0.6" />
+    </linearGradient>
+
+    <!-- Sunlit highlight -->
+    <linearGradient id="sunlit" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d8b890" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#c0a080" stop-opacity="0.15" />
+    </linearGradient>
+  </defs>
+
+  <g mask="url(#fullFade)">
+    <!-- Sunset sky background -->
+    <rect x="0" y="0" width="200" height="58" fill="url(#skyGradient)" />
+
+    <!-- Sun glow - positioned off-center -->
+    <ellipse cx="115" cy="40" rx="40" ry="25" fill="url(#sunGlow)" />
+
+    <!-- Sun disc - off center to the right -->
+    <circle cx="115" cy="34" r="8" fill="url(#sunDisc)" />
+
+    <!-- Layer 1 - Most distant (tall peak on right, lower on left) -->
+    <path d="M10 58
+             Q22 55, 35 52
+             Q45 49, 55 47
+             Q65 50, 75 48
+             Q85 51, 95 49
+             Q105 46, 115 44
+             Q125 47, 135 42
+             Q142 38, 150 35
+             Q158 38, 168 42
+             Q180 48, 190 58
+             Z"
+          fill="url(#layer1)" />
+
+    <!-- Layer 2 - Distant (prominent peak left of center) -->
+    <path d="M5 58
+             Q15 56, 28 53
+             Q38 50, 48 47
+             Q55 44, 62 40
+             Q68 36, 75 33
+             Q82 36, 88 40
+             Q95 44, 105 46
+             Q115 43, 125 45
+             Q138 48, 150 46
+             Q162 50, 175 53
+             Q188 56, 195 58
+             Z"
+          fill="url(#layer2)" />
+
+    <!-- Layer 3 - Mid-distance (peak center-right, smaller peak left) -->
+    <path d="M0 58
+             Q10 56, 20 54
+             Q30 52, 38 49
+             Q44 46, 50 44
+             Q56 47, 65 50
+             Q75 47, 85 45
+             Q92 42, 98 40
+             Q105 37, 112 34
+             Q118 37, 125 40
+             Q135 44, 145 47
+             Q155 50, 165 52
+             Q178 55, 200 58
+             Z"
+          fill="url(#layer3)" />
+
+    <!-- Sunlit area on layer 3 right peak -->
+    <path d="M105 37 Q112 34 Q118 37 Q114 36 Q112 35 Q108 36 Z"
+          fill="url(#sunlit)" />
+
+    <!-- Layer 4 - Closer (rolling foothills, higher on left) -->
+    <path d="M0 58
+             Q12 55, 22 52
+             Q30 48, 38 46
+             Q46 49, 55 52
+             Q65 49, 75 51
+             Q88 48, 100 50
+             Q112 52, 125 49
+             Q140 52, 155 54
+             Q170 52, 182 55
+             Q192 57, 200 58
+             Z"
+          fill="url(#layer4)" />
+
+    <!-- Layer 5 - Foreground hills (asymmetric) -->
+    <path d="M0 58
+             Q15 56, 30 55
+             Q45 57, 58 54
+             Q70 56, 82 55
+             Q95 57, 110 56
+             Q125 54, 140 56
+             Q155 55, 172 57
+             Q188 56, 200 58
+             Z"
+          fill="url(#layer5)" />
+
+    <!-- Subtle ridge highlights on various peaks -->
+    <path d="M68 36 Q75 33 Q82 36" fill="none" stroke="#c8b098" stroke-width="0.5" opacity="0.3" />
+    <path d="M142 38 Q150 35 Q158 38" fill="none" stroke="#c8b098" stroke-width="0.4" opacity="0.25" />
+    <path d="M105 37 Q112 34 Q118 37" fill="none" stroke="#d0b8a0" stroke-width="0.5" opacity="0.35" />
+  </g>
+</svg>
