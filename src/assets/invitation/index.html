@@ -18,9 +18,9 @@
                     colors: {
                         'wedding-cream': '#FDFBF7',
                         'wedding-sage': '#a47864',
-                        'wedding-dark': '#2C3627',
+                        'wedding-dark': '#372d28',
                         'wedding-rose': '#A57C7E',
-                        'wedding-dark-hover': '#3f4d38',
+                        'wedding-dark-hover': '#4a3830',
                         'wedding-sage-text': '#7d6e64',
                     },
                     fontFamily: {
@@ -32,17 +32,17 @@
         }
     </script>
     <style>
+        :root {
+            /* width that makes the image fill its 100vh frame with no letterbox */
+            --card-width: min(100vw, calc(100vh * 842 / 1264));
+        }
         body {
-            background-color: #FDFBF7;
-            color: #2C3627;
-            /* Safe area insets for notched phones */
+            background-color: #ede8e0;
+            color: #372d28;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
-
-        /* dvh-aware header min-height */
-        .header-hero {
-            min-height: 60vh;
-            min-height: max(60vh, 70dvh);
+        @media (min-width: 768px) {
+            body { padding-top: 2rem; padding-bottom: 2rem; }
         }
 
         .timeline-container {
@@ -123,6 +123,82 @@
             .timeline-icon { width: 3rem; height: 3rem; }
         }
 
+        /* ── Parallax scrollytelling ── */
+        .parallax-root {
+            position: relative;
+        }
+        .parallax-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .parallax-photo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center center;
+            background-color: #FDFBF7;
+            will-change: transform;
+        }
+        .parallax-overlay {
+            position: absolute;
+            inset: 0;
+            /* subtle vignette only — keeps the full image visible */
+            background: linear-gradient(
+                to bottom,
+                rgba(253,251,247,0.08) 0%,
+                rgba(253,251,247,0.0)  30%,
+                rgba(253,251,247,0.0)  70%,
+                rgba(253,251,247,0.25) 100%
+            );
+        }
+        .parallax-steps {
+            position: relative;
+            /* step 0 (hero) + step 1 (empty) + step 2 */
+            height: 300vh;
+            margin-top: -100vh;
+        }
+        .parallax-step {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .parallax-hero-content {
+            background: rgba(253, 251, 247, 0.82);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 2.5rem 3rem;
+            text-align: center;
+            max-width: 440px;
+            box-shadow: 0 8px 40px rgba(55, 45, 40, 0.15);
+        }
+        @media (max-width: 480px) {
+            .parallax-hero-content { padding: 2rem 1.75rem; }
+        }
+        .parallax-card {
+            background: rgba(253, 251, 247, 0.88);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(164, 120, 100, 0.25);
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            max-width: 320px;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            box-shadow: 0 8px 32px rgba(55, 45, 40, 0.12);
+        }
+        .parallax-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Password overlay */
         .password-overlay {
             position: fixed;
@@ -130,7 +206,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(44, 54, 39, 0.95);
+            background: rgba(55, 45, 40, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -152,7 +228,7 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         .password-modal h2 {
-            color: #2C3627;
+            color: #372d28;
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
             font-weight: 400;
@@ -173,7 +249,7 @@
             border: 1px solid #a47864;
             border-radius: 8px;
             background: transparent;
-            color: #2C3627;
+            color: #372d28;
             font-family: Lato, sans-serif;
             letter-spacing: 0.3em;
             margin-bottom: 1rem;
@@ -182,7 +258,7 @@
         .password-input:focus {
             outline: 2px solid #A57C7E;
             outline-offset: 2px;
-            border-color: #2C3627;
+            border-color: #372d28;
         }
         .password-input::placeholder {
             color: #a47864;
@@ -202,7 +278,7 @@
         }
         .password-submit {
             padding: 0.8rem 2.5rem;
-            background: #2C3627;
+            background: #372d28;
             color: #FDFBF7;
             border: none;
             border-radius: 8px;
@@ -215,7 +291,7 @@
             min-width: 120px;
         }
         .password-submit:hover {
-            background: #3f4d38;
+            background: #4a3830;
         }
         .password-submit:focus-visible {
             outline: 2px solid #A57C7E;
@@ -243,39 +319,55 @@
         </div>
     </div>
 
-    <header class="header-hero h-[75vh] relative w-full flex flex-col items-center justify-start pt-[15vh] overflow-hidden">
-        <img src="/invitation/mountain-sunset.svg" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40 object-top" style="z-index: -2;">
-        <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-wedding-cream to-transparent" style="z-index: -1;"></div>
+    <header class="parallax-root" style="width: var(--card-width); margin-left: auto; margin-right: auto;" aria-label="Einladung zu unserer Hochzeit">
+        <div class="parallax-sticky">
+            <img src="/invitation/Gemini_Generated_Image_ohq6qtohq6qtohq6.png"
+                 alt=""
+                 class="parallax-photo">
+            <div class="parallax-overlay" aria-hidden="true"></div>
+        </div>
 
-        <div class="text-center px-4 z-10">
-            <p class="text-wedding-dark tracking-[0.3em] uppercase text-sm md:text-base mb-6 font-bold">Wir trauen uns</p>
-            <h1 class="text-5xl md:text-7xl font-serif font-medium text-wedding-dark mb-4 leading-tight">
-                Einladung zu <br> unserer Hochzeit
-            </h1>
-            <div class="w-24 h-px bg-wedding-sage mx-auto mt-8"></div>
-            <p class="font-serif italic text-wedding-rose text-xl md:text-2xl mt-6 tracking-wide">Beatrice &amp; Florian &middot; 15. August 2026</p>
+        <div class="parallax-steps">
+            <!-- Step 0: hero title (visible on load, scrolls away on first scroll) -->
+            <div class="parallax-step" data-step="0">
+                <div class="parallax-hero-content">
+                    <p class="tracking-[0.3em] uppercase text-xs font-bold text-wedding-sage-text mb-4">Wir trauen uns</p>
+                    <h1 class="font-serif text-3xl md:text-4xl font-medium text-wedding-dark leading-tight mb-4">
+                        Einladung zu<br>unserer Hochzeit
+                    </h1>
+                    <div class="w-12 h-px bg-wedding-sage mx-auto my-4"></div>
+                    <p class="font-serif italic text-wedding-rose text-lg tracking-wide">Beatrice &amp; Florian &middot; 15. August 2026</p>
+                </div>
+            </div>
+            <!-- Step 1: empty — full photo visible with no overlay -->
+            <div class="parallax-step" data-step="1" aria-hidden="true"></div>
+            <!-- Step 2: "Wir freuen uns" -->
+            <div class="parallax-step" data-step="2">
+                <div class="parallax-card">
+                    <p class="font-serif italic text-xl text-wedding-dark leading-relaxed">
+                        Wir freuen uns, diesen besonderen Tag<br>mit euch zu teilen.
+                    </p>
+                </div>
+            </div>
         </div>
     </header>
 
+    <div class="shadow-[0_0_60px_rgba(55,45,40,0.10)] overflow-hidden bg-[#FDFBF7]" style="width: var(--card-width); margin-left: auto; margin-right: auto;">
     <main>
-        <section class="relative max-w-5xl mx-auto px-4 -mt-24 md:-mt-36 z-20 text-center pb-20">
-            <img src="/invitation/Gemini_Generated_Image_ohq6qtohq6qtohq6.png" alt="Beatrice &amp; Florian"
-                 class="block mx-auto rounded-2xl w-full max-w-lg md:max-w-xl shadow-[0_25px_60px_-15px_rgba(44,54,39,0.25)] border-[3px] md:border-4 border-white">
-        </section>
 
         <section class="bg-white py-24 border-y border-wedding-sage/20">
             <div class="max-w-5xl mx-auto px-4">
                 <h2 class="text-4xl font-serif text-center text-wedding-dark mb-6">Location</h2>
                 <div class="w-24 h-px bg-wedding-sage mx-auto mb-12"></div>
-                <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
+                <div class="flex flex-col items-center gap-8">
                     <a href="https://maps.google.com/maps?q=Unternberg+Hof,+83324+Ruhpolding"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Google Maps öffnen: Unternberg Hof, 83324 Ruhpolding"
-                       class="flex-shrink-0 rounded-3xl overflow-hidden block relative group cursor-pointer focus-visible:outline-2 focus-visible:outline-wedding-rose focus-visible:outline-offset-2"
-                       style="width: clamp(220px, 80vw, 320px); height: clamp(220px, 80vw, 320px);">
+                       class="flex-shrink-0 rounded-2xl overflow-hidden block relative group cursor-pointer focus-visible:outline-2 focus-visible:outline-wedding-rose focus-visible:outline-offset-2 w-full"
+                       style="height: 180px;">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors z-10 flex items-center justify-center">
-                            <i data-lucide="external-link" class="text-white opacity-0 group-hover:opacity-100 w-10 h-10 drop-shadow-md transition-opacity stroke-[1.5]"></i>
+                            <i data-lucide="external-link" class="text-white opacity-0 group-hover:opacity-100 w-8 h-8 drop-shadow-md transition-opacity stroke-[1.5]"></i>
                         </div>
                         <iframe
                             src="https://maps.google.com/maps?q=Unternberg+Hof,+83324+Ruhpolding&t=&z=13&ie=UTF8&iwloc=&output=embed"
@@ -287,13 +379,13 @@
                             title="Karte zur Location"
                             class="pointer-events-none absolute inset-0 scale-[1.15] origin-center"></iframe>
                     </a>
-                    <div class="text-left max-w-lg">
-                        <h3 class="text-3xl md:text-4xl font-serif font-medium text-wedding-dark mb-3">Unternberg Hof Ruhpolding</h3>
-                        <p class="text-xl font-serif italic text-gray-700 mb-6">Freie Trauung und Hochzeitsfeier</p>
-                        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+                    <div class="text-center w-full">
+                        <h3 class="text-2xl font-serif font-medium text-wedding-dark mb-2">Unternberg Hof Ruhpolding</h3>
+                        <p class="text-lg font-serif italic text-gray-700 mb-4">Freie Trauung und Hochzeitsfeier</p>
+                        <p class="text-gray-700 mb-4 leading-relaxed">
                             Bei schönem Wetter findet die freie Trauung draußen statt.
                         </p>
-                        <p class="text-lg">
+                        <p>
                             <strong class="text-wedding-dark">Adresse:</strong>
                             <a href="https://maps.google.com/maps?q=Unternberg+Hof,+83324+Ruhpolding"
                                target="_blank"
@@ -384,7 +476,7 @@
         </section>
 
         <section class="bg-wedding-cream py-20 border-t border-wedding-sage/20">
-            <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+            <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 gap-12">
 
                 <div class="bg-white p-10 rounded-2xl shadow-sm border border-wedding-sage/20 text-center">
                     <h2 class="text-4xl font-serif mb-6 text-wedding-dark">Details</h2>
@@ -474,6 +566,7 @@
             </div>
         </section>
     </main>
+    </div><!-- /card wrapper -->
 
     <script>
         // --- Password overlay ---
@@ -536,6 +629,43 @@
 
         // --- Initialize static Lucide icons ---
         lucide.createIcons();
+
+        // --- Parallax scrollytelling ---
+        (function () {
+            const root  = document.querySelector('.parallax-root');
+            const photo = document.querySelector('.parallax-photo');
+            const hero  = document.querySelector('.parallax-hero-content');
+            if (!root || !photo) return;
+
+            function onScroll() {
+                const rootTop  = root.getBoundingClientRect().top;
+                const scrolled = -rootTop; // px scrolled past top of root
+                const vh       = window.innerHeight;
+
+                // Hero fades out + drifts up during scroll 0→1 screen
+                if (hero) {
+                    const t = Math.min(1, Math.max(0, scrolled / vh));
+                    hero.style.opacity   = String(1 - t);
+                    hero.style.transform = `translateY(${-t * 40}px)`;
+                }
+
+                photo.style.transform = '';
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const card = entry.target.querySelector('.parallax-card');
+                    if (!card) return;
+                    card.classList.toggle('visible', entry.isIntersecting);
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.parallax-step[data-step="2"]')
+                .forEach(step => io.observe(step));
+        })();
 
         // --- Countdown to wedding ---
         (function () {
