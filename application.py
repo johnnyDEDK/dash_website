@@ -45,7 +45,7 @@ ALLOWED_DIETS = {"Ich esse alles", "Vegetarisch", "Vegan"}
 def get_db_connection():
     """Get a database connection (PostgreSQL or SQLite)."""
     if USE_POSTGRES:
-        return psycopg.connect(DATABASE_URL, row_factory=dict_row)
+        return psycopg.connect(DATABASE_URL, row_factory=dict_row, connect_timeout=5)
     else:
         conn = sqlite3.connect(LOCAL_DB_PATH)
         conn.row_factory = sqlite3.Row
@@ -714,7 +714,7 @@ ALLE GÄSTE ({total_count}):
 ---
 Diese E-Mail wurde automatisch generiert.
 """
-        _send_rsvp_email(subject, body, INVITATION_FROM_ADDRESS)
+        _send_rsvp_email(subject, body, "kontakt@beas-coaching.de")
     except Exception as e:
         logger.error(f"Invitation email build error: {e}")
 
