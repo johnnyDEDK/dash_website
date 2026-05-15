@@ -37,6 +37,10 @@ RSVP_EMAILS = [e.strip() for e in os.environ.get("RSVP_EMAILS", "thams.florian@g
 # Database type flag
 USE_POSTGRES = bool(DATABASE_URL)
 
+# Invitation page constants
+INVITATION_FROM_ADDRESS = "RSVP Hochzeit <onboarding@resend.dev>"
+ALLOWED_DIETS = {"Ich esse alles", "Vegetarisch", "Vegan"}
+
 
 def get_db_connection():
     """Get a database connection (PostgreSQL or SQLite)."""
@@ -64,6 +68,67 @@ def get_all_rsvps():
         return []
 
 
+def _save_guests_to_db(guests, table, extra_columns_per_guest, submitted_at=None):
+    """Insert one row per guest into `table`. Returns submission_group UUID string.
+
+    extra_columns_per_guest(guest_dict) -> dict of additional column-name -> value.
+    `guest_name`, `submitted_at`, `submission_group` are always written.
+    `submitted_at` defaults to datetime.now() if not provided; pass an explicit
+    value when the caller needs the same timestamp for downstream side effects
+    (e.g. email body) so the DB row and email agree.
+    """
+    import uuid
+    submission_id = str(uuid.uuid4())
+    if submitted_at is None:
+        submitted_at = datetime.now()
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        for guest in guests:
+            extras = extra_columns_per_guest(guest) or {}
+            columns = ['guest_name'] + list(extras.keys()) + ['submitted_at', 'submission_group']
+            if USE_POSTGRES:
+                placeholders = ', '.join(['%s'] * len(columns))
+                values = [guest['name']] + list(extras.values()) + [submitted_at, submission_id]
+            else:
+                placeholders = ', '.join(['?'] * len(columns))
+                # Coerce booleans to 0/1 for SQLite
+                coerced = []
+                for v in extras.values():
+                    if isinstance(v, bool):
+                        coerced.append(1 if v else 0)
+                    else:
+                        coerced.append(v)
+                values = [guest['name']] + coerced + [submitted_at.isoformat(), submission_id]
+            sql = f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({placeholders})"
+            cur.execute(sql, values)
+        conn.commit()
+    finally:
+        cur.close()
+        conn.close()
+    return submission_id
+
+
+def _send_rsvp_email(subject, body, from_address):
+    """Send an RSVP summary email via Resend. Returns True on success, False on failure."""
+    if not RESEND_API_KEY:
+        logger.warning("RESEND_API_KEY not configured, skipping email notification")
+        return False
+    try:
+        resend.api_key = RESEND_API_KEY
+        resend.Emails.send({
+            "from": from_address,
+            "to": RSVP_EMAILS,
+            "subject": subject,
+            "text": body,
+        })
+        return True
+    except Exception as e:
+        logger.error(f"Email error: {e}")
+        return False
+
+
 def init_db():
     """Initialize the database tables if they don't exist."""
     try:
@@ -85,6 +150,28 @@ def init_db():
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     guest_name TEXT NOT NULL,
                     attending INTEGER NOT NULL,
+                    submitted_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                    submission_group TEXT NOT NULL
+                )
+            ''')
+        if USE_POSTGRES:
+            cur.execute('''
+                CREATE TABLE IF NOT EXISTS invitation_rsvp (
+                    id SERIAL PRIMARY KEY,
+                    guest_name VARCHAR(255) NOT NULL,
+                    diet VARCHAR(50) NOT NULL,
+                    allergies TEXT NOT NULL DEFAULT '',
+                    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    submission_group UUID NOT NULL
+                )
+            ''')
+        else:
+            cur.execute('''
+                CREATE TABLE IF NOT EXISTS invitation_rsvp (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    guest_name TEXT NOT NULL,
+                    diet TEXT NOT NULL,
+                    allergies TEXT NOT NULL DEFAULT '',
                     submitted_at TEXT DEFAULT CURRENT_TIMESTAMP,
                     submission_group TEXT NOT NULL
                 )
@@ -400,11 +487,8 @@ def save_the_date_verify():
     return jsonify({'success': False}), 401
 
 
-@server.route('/save-the-date/rsvp', methods=['POST'])
-def save_the_date_rsvp():
-    """Handle RSVP submissions - save to database and send email notification."""
-    import uuid
-
+def _save_the_date_handler(from_address):
+    """Shared handler body for save-the-date and save-the-date-family RSVP routes."""
     data = request.get_json()
     if not data or 'guests' not in data:
         return jsonify({'success': False, 'error': 'No guest data provided'}), 400
@@ -413,59 +497,46 @@ def save_the_date_rsvp():
     if not guests:
         return jsonify({'success': False, 'error': 'No guests in submission'}), 400
 
-    submission_id = str(uuid.uuid4())
     submitted_at = datetime.now()
 
-    # Save to database
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        for guest in guests:
-            if USE_POSTGRES:
-                cur.execute(
-                    'INSERT INTO rsvp (guest_name, attending, submitted_at, submission_group) VALUES (%s, %s, %s, %s)',
-                    (guest['name'], guest['attending'], submitted_at, submission_id)
-                )
-            else:
-                cur.execute(
-                    'INSERT INTO rsvp (guest_name, attending, submitted_at, submission_group) VALUES (?, ?, ?, ?)',
-                    (guest['name'], 1 if guest['attending'] else 0, submitted_at.isoformat(), submission_id)
-                )
-        conn.commit()
-        cur.close()
-        conn.close()
+        _save_guests_to_db(
+            guests,
+            'rsvp',
+            lambda g: {'attending': g['attending']},
+            submitted_at=submitted_at,
+        )
     except Exception as e:
         logger.error(f"Database error: {e}")
         return jsonify({'success': False, 'error': 'Database error'}), 500
 
-    # Send email notification via Resend
-    if RESEND_API_KEY:
-        try:
-            resend.api_key = RESEND_API_KEY
+    # Email is best-effort; only build it when we'll actually send.
+    if not RESEND_API_KEY:
+        logger.warning("RESEND_API_KEY not configured, skipping email notification")
+        return jsonify({'success': True})
 
-            # Build email content for new submission
-            new_guest_list = "\n".join([
-                f"  - {g['name']}: {'Kommt' if g['attending'] else 'Kommt nicht'}"
-                for g in guests
-            ])
-            new_attending_count = sum(1 for g in guests if g['attending'])
+    # Build email content for new submission (preserved character-for-character)
+    new_guest_list = "\n".join([
+        f"  - {g['name']}: {'Kommt' if g['attending'] else 'Kommt nicht'}"
+        for g in guests
+    ])
+    new_attending_count = sum(1 for g in guests if g['attending'])
 
-            # Get complete RSVP summary from database
-            all_rsvps = get_all_rsvps()
-            total_attending = sum(1 for g in all_rsvps if g['attending'])
-            total_not_attending = sum(1 for g in all_rsvps if not g['attending'])
+    all_rsvps = get_all_rsvps()
+    total_attending = sum(1 for g in all_rsvps if g['attending'])
+    total_not_attending = sum(1 for g in all_rsvps if not g['attending'])
 
-            attending_list = "\n".join([
-                f"  - {g['name']}"
-                for g in all_rsvps if g['attending']
-            ]) or "  (noch keine)"
+    attending_list = "\n".join([
+        f"  - {g['name']}"
+        for g in all_rsvps if g['attending']
+    ]) or "  (noch keine)"
 
-            not_attending_list = "\n".join([
-                f"  - {g['name']}"
-                for g in all_rsvps if not g['attending']
-            ]) or "  (noch keine)"
+    not_attending_list = "\n".join([
+        f"  - {g['name']}"
+        for g in all_rsvps if not g['attending']
+    ]) or "  (noch keine)"
 
-            email_text = f"""Neue RSVP-Anmeldung für die Hochzeit!
+    email_text = f"""Neue RSVP-Anmeldung für die Hochzeit!
 
 Datum: {submitted_at.strftime('%d.%m.%Y %H:%M')}
 
@@ -489,21 +560,15 @@ GESAMT: {len(all_rsvps)} Rückmeldungen ({total_attending} Zusagen, {total_not_a
 ---
 Diese E-Mail wurde automatisch generiert.
 """
-
-            resend.Emails.send({
-                "from": "kontakt@beas-coaching.de",
-                "to": RSVP_EMAILS,
-                "subject": f"RSVP Hochzeit - {new_attending_count} neue Zusage(n) | Gesamt: {total_attending} Zusagen",
-                "text": email_text
-            })
-
-        except Exception as e:
-            logger.error(f"Email error: {e}")
-            # Don't fail the request if email fails, data is already saved
-    else:
-        logger.warning("RESEND_API_KEY not configured, skipping email notification")
-
+    subject = f"RSVP Hochzeit - {new_attending_count} neue Zusage(n) | Gesamt: {total_attending} Zusagen"
+    _send_rsvp_email(subject, email_text, from_address)
     return jsonify({'success': True})
+
+
+@server.route('/save-the-date/rsvp', methods=['POST'])
+def save_the_date_rsvp():
+    """Handle RSVP submissions - save to database and send email notification."""
+    return _save_the_date_handler("kontakt@beas-coaching.de")
 
 
 # Hidden Save the Date Family page routes
@@ -531,9 +596,30 @@ def save_the_date_family_verify():
 @server.route('/save-the-date-family/rsvp', methods=['POST'])
 def save_the_date_family_rsvp():
     """Handle RSVP submissions - save to database and send email notification."""
-    import uuid
+    return _save_the_date_handler("RSVP Hochzeit <onboarding@resend.dev>")
 
-    data = request.get_json()
+
+# Hidden Invitation page routes
+INVITATION_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src', 'assets', 'invitation')
+
+
+@server.route('/invitation')
+def invitation_page():
+    return send_from_directory(INVITATION_DIR, 'index.html')
+
+
+@server.route('/invitation/verify', methods=['POST'])
+def invitation_verify():
+    data = request.get_json(silent=True)
+    if data and data.get('password') == SAVE_THE_DATE_PASSWORD:
+        return jsonify({'success': True})
+    return jsonify({'success': False}), 401
+
+
+@server.route('/invitation/rsvp', methods=['POST'])
+def invitation_rsvp():
+    """Handle invitation RSVP submissions - save to database and send email."""
+    data = request.get_json(silent=True)
     if not data or 'guests' not in data:
         return jsonify({'success': False, 'error': 'No guest data provided'}), 400
 
@@ -541,97 +627,121 @@ def save_the_date_family_rsvp():
     if not guests:
         return jsonify({'success': False, 'error': 'No guests in submission'}), 400
 
-    submission_id = str(uuid.uuid4())
-    submitted_at = datetime.now()
+    # Validate every guest before any insert
+    normalized = []
+    for g in guests:
+        name = (g.get('name') or '').strip()
+        if not name:
+            return jsonify({'success': False, 'error': 'Empty guest name'}), 400
+        diet = g.get('diet')
+        if diet not in ALLOWED_DIETS:
+            return jsonify({'success': False, 'error': 'Invalid diet'}), 400
+        allergies = g.get('allergies') or ''
+        normalized.append({'name': name, 'diet': diet, 'allergies': allergies})
 
-    # Save to database
+    submitted_at = datetime.now()
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        for guest in guests:
-            if USE_POSTGRES:
-                cur.execute(
-                    'INSERT INTO rsvp (guest_name, attending, submitted_at, submission_group) VALUES (%s, %s, %s, %s)',
-                    (guest['name'], guest['attending'], submitted_at, submission_id)
-                )
-            else:
-                cur.execute(
-                    'INSERT INTO rsvp (guest_name, attending, submitted_at, submission_group) VALUES (?, ?, ?, ?)',
-                    (guest['name'], 1 if guest['attending'] else 0, submitted_at.isoformat(), submission_id)
-                )
-        conn.commit()
-        cur.close()
-        conn.close()
+        _save_guests_to_db(
+            normalized,
+            'invitation_rsvp',
+            lambda g: {'diet': g['diet'], 'allergies': g['allergies']},
+            submitted_at=submitted_at,
+        )
     except Exception as e:
         logger.error(f"Database error: {e}")
         return jsonify({'success': False, 'error': 'Database error'}), 500
 
-    # Send email notification via Resend
-    if RESEND_API_KEY:
-        try:
-            resend.api_key = RESEND_API_KEY
+    # Email is best-effort; only build it when we'll actually send.
+    if not RESEND_API_KEY:
+        logger.warning("RESEND_API_KEY not configured, skipping email notification")
+        return jsonify({'success': True})
 
-            # Build email content for new submission
-            new_guest_list = "\n".join([
-                f"  - {g['name']}: {'Kommt' if g['attending'] else 'Kommt nicht'}"
-                for g in guests
-            ])
-            new_attending_count = sum(1 for g in guests if g['attending'])
+    try:
+        # New submission lines
+        new_lines = "\n".join([
+            f"  - {g['name']} ({g['diet']}) | Allergien: {g['allergies'] if g['allergies'] else '—'}"
+            for g in normalized
+        ])
 
-            # Get complete RSVP summary from database
-            all_rsvps = get_all_rsvps()
-            total_attending = sum(1 for g in all_rsvps if g['attending'])
-            total_not_attending = sum(1 for g in all_rsvps if not g['attending'])
+        # Pull complete summary
+        all_rows = _get_all_invitation_rsvps()
+        diet_counts = {"Ich esse alles": 0, "Vegetarisch": 0, "Vegan": 0}
+        for row in all_rows:
+            if row['diet'] in diet_counts:
+                diet_counts[row['diet']] += 1
 
-            attending_list = "\n".join([
-                f"  - {g['name']}"
-                for g in all_rsvps if g['attending']
-            ]) or "  (noch keine)"
+        all_guest_lines = "\n".join([
+            f"  - {row['guest_name']} ({row['diet']})"
+            for row in all_rows
+        ]) or "  (noch keine)"
 
-            not_attending_list = "\n".join([
-                f"  - {g['name']}"
-                for g in all_rsvps if not g['attending']
-            ]) or "  (noch keine)"
+        allergy_lines = "\n".join([
+            f"  - {row['guest_name']}: {row['allergies']}"
+            for row in all_rows if row['allergies']
+        ]) or "  (keine Allergien gemeldet)"
 
-            email_text = f"""Neue RSVP-Anmeldung für die Hochzeit!
+        new_count = len(normalized)
+        total_count = len(all_rows)
+        subject = (
+            f"Einladung RSVP - {new_count} neue Anmeldung(en) | "
+            f"Allesesser: {diet_counts['Ich esse alles']} | "
+            f"Veg: {diet_counts['Vegetarisch']} | "
+            f"Vegan: {diet_counts['Vegan']}"
+        )
+        body = f"""Neue Einladungs-RSVP für die Hochzeit!
 
 Datum: {submitted_at.strftime('%d.%m.%Y %H:%M')}
 
 Neue Anmeldung:
-{new_guest_list}
-
-Zusagen (neu): {new_attending_count} von {len(guests)}
+{new_lines}
 
 ════════════════════════════════════════
 GESAMTÜBERSICHT
 ════════════════════════════════════════
 
-ZUSAGEN ({total_attending}):
-{attending_list}
+ERNÄHRUNG:
+  Allesesser:    {diet_counts['Ich esse alles']}
+  Vegetarisch:   {diet_counts['Vegetarisch']}
+  Vegan:         {diet_counts['Vegan']}
+  GESAMT:        {total_count} Gäste
 
-ABSAGEN ({total_not_attending}):
-{not_attending_list}
+ALLERGIEN & UNVERTRÄGLICHKEITEN:
+{allergy_lines}
 
-GESAMT: {len(all_rsvps)} Rückmeldungen ({total_attending} Zusagen, {total_not_attending} Absagen)
+ALLE GÄSTE ({total_count}):
+{all_guest_lines}
 
 ---
 Diese E-Mail wurde automatisch generiert.
 """
-
-            resend.Emails.send({
-                "from": "RSVP Hochzeit <onboarding@resend.dev>",
-                "to": RSVP_EMAILS,
-                "subject": f"RSVP Hochzeit - {new_attending_count} neue Zusage(n) | Gesamt: {total_attending} Zusagen",
-                "text": email_text
-            })
-
-        except Exception as e:
-            logger.error(f"Email error: {e}")
-            # Don't fail the request if email fails, data is already saved
-    else:
-        logger.warning("RESEND_API_KEY not configured, skipping email notification")
+        _send_rsvp_email(subject, body, INVITATION_FROM_ADDRESS)
+    except Exception as e:
+        logger.error(f"Invitation email build error: {e}")
 
     return jsonify({'success': True})
+
+
+@server.route('/invitation/<path:filename>')
+def invitation_assets(filename):
+    return send_from_directory(INVITATION_DIR, filename)
+
+
+def _get_all_invitation_rsvps():
+    """Return all invitation_rsvp rows as list of dicts."""
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT guest_name, diet, allergies FROM invitation_rsvp ORDER BY guest_name')
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        return [
+            {'guest_name': r['guest_name'], 'diet': r['diet'], 'allergies': r['allergies']}
+            for r in rows
+        ]
+    except Exception as e:
+        logger.error(f"Error fetching invitation RSVPs: {e}")
+        return []
 
 
 # Initialize database on startup
