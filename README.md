@@ -152,6 +152,6 @@ def create_article_card(post):
     return card
 ```
 
-The resulting cards will be used to populate the blog page, shown below.
+The resulting cards will be used to populate the blog page, shown below.hh
 
 ![article cards](./src/assets/blog_example.png)
